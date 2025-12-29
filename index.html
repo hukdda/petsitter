@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>펫시터의 정석 - 부산·대구·울산·창원·포항 전문</title>
+    <title>펫시터의 정석 - 부산·대구·울산·창원·포항 방문 펫시팅</title>
     <meta name="description" content="부산, 대구, 울산, 창원, 포항 지역 대표 방문 펫시터. 1:1 대면 면접으로 검증된 전문가가 안심 돌봄 서비스를 제공합니다.">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -49,133 +49,7 @@
         .section-title { text-align: center; font-size: 1.8rem; font-weight: 900; margin-bottom: 2.5rem; line-height: 1.4; }
 
         /* --- 2. Hero (계산기 없는 버전) --- */
-        .hero { padding: 4rem 0; text-align: center; background: linear-gradient(to bottom, #fff, #fff9e6); }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; line-height: 1.4; margin-bottom: 1rem; }
-        .hero h1 span { color: var(--amber-700); }
-        .hero p { font-size: 1.1rem; color: var(--gray-600); margin-bottom: 2.5rem; }
-        .hero .reserve-btn-main {
-            display: inline-block;
-            background: var(--amber-700); color: white; padding: 1rem 2.5rem;
-            border-radius: 50px; font-weight: 700; font-size: 1.2rem;
-            text-decoration: none; transition: background-color 0.3s;
-        }
-        .hero .reserve-btn-main:hover { background: var(--amber-800); }
-
-
-        /* --- 3. 나머지 섹션 스타일 --- */
-        .trust .expert-grid, .review-grid { display: grid; gap: 1.5rem; }
-        .trust .expert-card {
-            background: var(--gray-100); padding: 1.5rem; border-radius: 1rem;
-            display: flex; align-items: flex-start; gap: 1rem;
-        }
-        .trust .expert-card .icon-wrapper { width: 32px; height: 32px; flex-shrink: 0; color: var(--amber-700); }
-        .trust .expert-card .icon { width: 100%; height: 100%; }
-        .trust .expert-card .text-wrapper { flex-grow: 1; }
-        .trust .expert-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .trust .expert-card p { font-size: 0.95rem; color: #444; line-height: 1.6; }
-
-        .pricing { background-color: #fff; }
-        .pricing-table {
-            border-collapse: collapse; width: 100%; max-width: 800px; margin: 0 auto 1.5rem;
-            border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-        .pricing-table th, .pricing-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .pricing-table thead { background-color: var(--gray-100); }
-        .pricing-table th { font-size: 1rem; font-weight: 700; }
-        .pricing-table td { font-size: 0.95rem; }
-        .pricing-table tbody tr:last-child td { border-bottom: none; }
-        .pricing-table .price { font-weight: 700; color: var(--amber-700); }
-        .pricing-note { text-align: center; font-size: 0.9rem; color: var(--gray-600); max-width: 800px; margin: 0 auto; }
-
-        .gallery { background: #fff; }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .photo-item { height: 200px; border-radius: 1rem; overflow: hidden; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.07); }
-        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        .reviews { background-color: var(--amber-50); }
-        .review-card {
-            background: white; border: 1px solid #eee; padding: 1.5rem; border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-        .review-text { font-style: italic; margin-bottom: 1rem; color: #333; font-size: 1rem; }
-        .review-text::before { content: '“'; } .review-text::after { content: '”'; }
-        .review-author { font-weight: 700; color: var(--amber-700); text-align: right; font-size: 0.95rem; }
-
-        /* FAQ Section */
-        .faq .faq-item { border-bottom: 1px solid #eee; }
-        .faq details { padding: 1.25rem 0; }
-        .faq summary {
-            font-size: 1.05rem; font-weight: 700; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            list-style: none; /* 기본 화살표 제거 */
-        }
-        .faq summary::-webkit-details-marker { display: none; } /* 크롬, 사파리 화살표 제거 */
-        .faq summary::after { content: '+'; font-size: 1.5rem; color: var(--amber-700); transition: transform 0.2s; }
-        .faq details[open] > summary::after { transform: rotate(45deg); }
-        .faq .faq-answer {
-            padding-top: 1rem;
-            font-size: 0.95rem; line-height: 1.8; color: var(--gray-600);
-        }
-        .faq-table {
-            border-collapse: collapse; width: 100%; margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-        .faq-table th, .faq-table td { border: 1px solid #ddd; padding: 0.6rem; text-align: center; }
-        .faq-table th { background-color: var(--gray-100); font-weight: 700; }
-
-        footer { background: #1f2937; color: white; padding: 3rem 1.5rem; text-align: center; font-size: 0.9rem; }
-
-        /* --- 4. 데스크톱 (PC) 화면 스타일 --- */
-        @media (min-width: 768px) {
-            body { padding-top: 88px; }
-            header { height: 88px; }
-            .logo { font-size: 1.8rem; }
-            .nav-links { display: flex; gap: 2.5rem; }
-            .nav-links a { text-decoration: none; color: var(--gray-600); font-weight: 700; font-size: 1.1rem; }
-            .reserve-btn { padding: 0.8rem 2rem; font-size: 1.1rem; }
-
-            .section { padding: 6rem 0; }
-            .section-title { font-size: 2.2rem; margin-bottom: 4rem; }
-
-            .hero { padding: 8rem 0; }
-            .hero h1 { font-size: 3.5rem; }
-            .hero p { font-size: 1.4rem; }
-
-            .trust .expert-grid { grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto; }
-            .trust .expert-card { display: block; padding: 2.5rem; text-align: center; }
-            .trust .expert-card .icon-wrapper { margin: 0 auto 1.5rem; width: 48px; height: 48px; }
-            .trust .expert-card h3 { font-size: 1.5rem; }
-            .trust .expert-card p { font-size: 1.1rem; }
-
-            .gallery .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-            .photo-item { height: 320px; }
-
-            .review-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-            .review-card { padding: 2rem; }
-        }
-    </style>
-</head>
-<body>
-<header>
-    <div class="container header-inner">
-        <div class="logo">🐾 펫시터의 정석</div>
-        <nav class="nav-links">
-            <a href="#trust">서비스 특징</a>
-            <a href="#pricing">요금 안내</a>
-            <a href="#reviews">이용 후기</a>
-            <a href="#faq">자주 묻는 질문</a>
-        </nav>
-        <a href="calculator.html" class="reserve-btn">실시간 견적 및 예약</a>
-    </div>
-</header>
-
-<main>
-    <!-- 1. Hero (계산기 없는 버전) -->
-    <section class="hero">
-        <div class="container">
-            <h1>우리 아이, <span>집에서 행복하게</span></h1>
-            <p>부산·대구·울산·창원·포항 전문 방문 펫시터</p>
+        .hero { padding: 4rem 0; text-align: center; background: linear-gradient(to bottom, #fff, 표 방문 펫시터부산·대
             <a href="calculator.html" class="reserve-btn-main">실시간 견적 및 예약하기</a>
         </div>
     </section>
@@ -258,3 +132,4 @@
 </footer>
 </body>
 </html>
+
