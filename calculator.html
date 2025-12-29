@@ -38,7 +38,7 @@
         .form-group select, .form-group input {
             width: 100%; padding: 0.9rem; border: 1px solid #ddd;
             border-radius: 0.5rem; font-size: 1rem; appearance: none;
-            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E' ) no-repeat right .9rem center/12px;
+            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E' ) no-repeat right .9rem center/12px;
         }
         .form-group input[type="date"] { background-image: none; }
         .date-group { display: flex; gap: 1rem; }
@@ -53,13 +53,27 @@
         .price-display .details { font-size: 0.9rem; color: var(--gray-600); margin-top: 0.75rem; line-height: 1.5; }
 
         .submit-btn {
-            display: block; width: 100%; background: var(--amber-700); color: white;
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; background: var(--amber-700); color: white;
             padding: 1rem; border: none; border-radius: 0.75rem;
             font-size: 1.1rem; font-weight: 700; text-align: center;
             text-decoration: none; transition: background-color 0.3s; margin-top: 1.5rem;
             cursor: pointer;
         }
         .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
+        /* ★★★ 신규 기능: '부드러움'을 위한 로딩 스피너 스타일 (VVIP 컨시어지 서비스) ★★★ */
+        /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
+        .spinner {
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -88,9 +102,6 @@
             </div>
             <div class="form-group">
                 <label for="visit-time">방문 시간</label>
-                <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
-                <!-- ★★★ 수정된 부분: 불편한 <input type="time">을 제거하고, 쾌적한 <select>로 교체 ★★★ -->
-                <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
                 <select id="visit-time"></select>
             </div>
             <div class="form-group">
@@ -106,7 +117,10 @@
                 <div class="amount">날짜를 선택해주세요</div>
                 <div class="details"></div>
             </div>
-            <button id="submit-booking" class="submit-btn">이 조건으로 예약하기</button>
+            <button id="submit-booking" class="submit-btn">
+                <!-- ★★★ 수정된 부분: 버튼 내부 텍스트를 담을 span 추가 ★★★ -->
+                <span id="submit-text">이 조건으로 예약하기</span>
+            </button>
         </div>
     </div>
 
@@ -115,15 +129,13 @@
             const serviceSelect = document.getElementById('service');
             const startDateInput = document.getElementById('start-date');
             const endDateInput = document.getElementById('end-date');
-            const timeSelect = document.getElementById('visit-time'); // ★★★ 수정: timeInput -> timeSelect
+            const timeSelect = document.getElementById('visit-time');
             const petCountSelect = document.getElementById('pet-count');
             const amountDisplay = document.querySelector('.price-display .amount');
             const detailsDisplay = document.querySelector('.price-display .details');
             const submitButton = document.getElementById('submit-booking');
+            const submitText = document.getElementById('submit-text'); // ★★★ 추가: 버튼 텍스트 요소
 
-            // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-            // ★★★ 신규 기능: '커스텀 시간 선택기'의 시간표를 자동으로 생성하는 로직 ★★★
-            // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
             function populateTimeSelect() {
                 for (let i = 0; i < 24 * 2; i++) {
                     const hours = Math.floor(i / 2);
@@ -137,11 +149,9 @@
                     option.textContent = timeValue;
                     timeSelect.appendChild(option);
                 }
-                // 기본값으로 오전 9시 선택
                 timeSelect.value = "09:00";
             }
             populateTimeSelect();
-
 
             let appliedSurcharges = new Set();
 
@@ -173,7 +183,7 @@
                 const basePrice = parseInt(serviceSelect.value);
                 const startDateValue = startDateInput.value;
                 const endDateValue = endDateInput.value;
-                const visitTimeValue = timeSelect.value; // ★★★ 수정: timeInput -> timeSelect
+                const visitTimeValue = timeSelect.value;
                 const petCount = parseInt(petCountSelect.value);
 
                 appliedSurcharges.clear();
@@ -260,30 +270,45 @@
                                          (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
             }
 
-            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect].forEach(el => { // ★★★ 수정: timeInput -> timeSelect
+            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect].forEach(el => {
                 el.addEventListener('change', calculatePrice);
             });
 
             submitButton.addEventListener('click', () => {
-                if (!startDateInput.value || !endDateInput.value || !timeSelect.value) { // ★★★ 수정: timeInput -> timeSelect
+                if (!startDateInput.value || !endDateInput.value || !timeSelect.value) {
                     alert('모든 항목을 선택해주세요!');
                     return;
                 }
                 
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                // ★★★ 신규 기능: '부드러운' 이동을 위한 로딩 스피너 활성화 (VVIP 컨시어지 서비스) ★★★
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                submitButton.disabled = true;
+                submitText.textContent = '예약 페이지로 이동 중...';
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner';
+                submitButton.prepend(spinner);
+
                 const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
                 const serviceName = selectedOption.getAttribute('data-service-name');
                 const finalPrice = amountDisplay.textContent;
 
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                // ★★★ 신규 기능: Tally에 데이터를 자동으로 채워주기 위한 '비밀 편지' 작성 ★★★
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
                 const params = new URLSearchParams();
                 params.append('service', serviceName);
                 params.append('startDate', startDateInput.value);
                 params.append('endDate', endDateInput.value);
-                params.append('time', timeSelect.value); // ★★★ 수정: timeInput -> timeSelect
+                params.append('time', timeSelect.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
                 params.append('price', finalPrice);
                 params.append('surcharges', Array.from(appliedSurcharges).join(', '));
 
-                window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
+                // 1초의 '부드러운' 지연 후, 모든 정보가 담긴 URL로 이동
+                setTimeout(() => {
+                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
+                }, 1000);
             });
 
             calculatePrice();
