@@ -26,10 +26,7 @@
             align-items: center;
             min-height: 100vh;
         }
-        .calculator-wrapper {
-            width: 100%;
-            max-width: 500px;
-        }
+        .calculator-wrapper { width: 100%; max-width: 550px; }
         .logo { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 1rem; }
         .logo a { color: inherit; text-decoration: none; }
         .calculator-box {
@@ -37,22 +34,22 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.1); text-align: left;
         }
         .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-900); }
+        .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
         .form-group select, .form-group input {
             width: 100%; padding: 0.9rem; border: 1px solid #ddd;
             border-radius: 0.5rem; font-size: 1rem; appearance: none;
-            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E' ) no-repeat right 1rem center;
-            background-size: .65em auto;
+            background: var(--gray-100);
         }
-        .form-group input[type="date"], .form-group input[type="time"] { background-image: none; }
+        .date-group { display: flex; gap: 1rem; }
+        .date-group > div { flex: 1; }
 
         .price-display {
             background: var(--amber-50); border-radius: 0.75rem; padding: 1.2rem;
             text-align: center; margin-top: 1.5rem;
         }
         .price-display .label { font-size: 1rem; color: var(--gray-600); }
-        .price-display .amount { font-size: 2rem; font-weight: 900; color: var(--amber-700); }
-        .price-display .surcharge-details { font-size: 0.85rem; color: var(--gray-600); margin-top: 0.5rem; }
+        .price-display .amount { font-size: 2.2rem; font-weight: 900; color: var(--amber-700); }
+        .price-display .details { font-size: 0.9rem; color: var(--gray-600); margin-top: 0.75rem; line-height: 1.5; }
 
         .submit-btn {
             display: block; width: 100%; background: var(--amber-700); color: white;
@@ -61,7 +58,6 @@
             text-decoration: none; transition: background-color 0.3s; margin-top: 1.5rem;
             cursor: pointer;
         }
-        .submit-btn:hover { background: var(--amber-800); }
         .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
     </style>
 </head>
@@ -79,9 +75,15 @@
                     <option value="50000" data-service-name="방문 목욕 (소형견)">방문 목욕 (소형견)</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="visit-date">방문 날짜</label>
-                <input type="date" id="visit-date">
+            <div class="date-group">
+                <div class="form-group">
+                    <label for="start-date">방문 시작일</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">방문 종료일</label>
+                    <input type="date" id="end-date">
+                </div>
             </div>
             <div class="form-group">
                 <label for="visit-time">방문 시간</label>
@@ -91,14 +93,14 @@
                 <label for="pet-count">반려동물 마리 수</label>
                 <select id="pet-count">
                     <option value="1">1 마리</option>
-                    <option value="2">2 마리 (+5,000원)</option>
+                    <option value="2">2 마리</option>
                     <option value="3">3 마리 이상 (별도 협의)</option>
                 </select>
             </div>
             <div class="price-display">
                 <div class="label">예상 돌봄 비용</div>
-                <div class="amount">0 원</div>
-                <div class="surcharge-details"></div>
+                <div class="amount">날짜를 선택해주세요</div>
+                <div class="details"></div>
             </div>
             <button id="submit-booking" class="submit-btn">이 조건으로 예약하기</button>
         </div>
@@ -106,84 +108,158 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- HTML 요소 가져오기 ---
             const serviceSelect = document.getElementById('service');
-            const dateInput = document.getElementById('visit-date');
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
             const timeInput = document.getElementById('visit-time');
             const petCountSelect = document.getElementById('pet-count');
             const amountDisplay = document.querySelector('.price-display .amount');
-            const surchargeDisplay = document.querySelector('.price-display .surcharge-details');
+            const detailsDisplay = document.querySelector('.price-display .details');
             const submitButton = document.getElementById('submit-booking');
 
+            // --- 사장님의 할증 정책 데이터베이스 ---
+            const specialRatePeriods = [
+                { start: '2025-12-24', end: '2025-12-28', rate: 10000, name: '크리스마스 연휴' },
+                { start: '2025-12-31', end: '2025-12-31', rate: 10000, name: '연말' },
+                { start: '2026-01-01', end: '2026-01-01', rate: 7000, name: '신정' },
+                { start: '2026-02-15', end: '2026-02-18', rate: 10000, name: '설 연휴' },
+                { start: '2026-02-28', end: '2026-03-01', rate: 7000, name: '삼일절 연휴' },
+                { start: '2026-05-05', end: '2026-05-05', rate: 7000, name: '어린이날' },
+                { start: '2026-06-06', end: '2026-06-06', rate: 5000, name: '현충일' },
+                { start: '2026-07-25', end: '2026-08-09', rate: 5000, name: '여름 휴가 시즌' },
+                { start: '2026-08-15', end: '2026-08-15', rate: 5000, name: '광복절' },
+                { start: '2026-09-23', end: '2026-09-26', rate: 10000, name: '추석 연휴' },
+                { start: '2026-10-03', end: '2026-10-03', rate: 5000, name: '개천절' },
+                { start: '2026-10-09', end: '2026-10-09', rate: 5000, name: '한글날' },
+                { start: '2026-12-24', end: '2026-12-27', rate: 10000, name: '크리스마스 연휴' }
+            ];
+
+            // --- 오늘 이전 날짜 선택 방지 ---
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
-            dateInput.min = `${yyyy}-${mm}-${dd}`;
+            const todayString = `${yyyy}-${mm}-${dd}`;
+            startDateInput.min = todayString;
+            endDateInput.min = todayString;
 
+            // --- 핵심 두뇌: 기간 기반 요금 계산 함수 ---
             function calculatePrice() {
                 const basePrice = parseInt(serviceSelect.value);
-                const visitDateValue = dateInput.value;
+                const startDateValue = startDateInput.value;
+                const endDateValue = endDateInput.value;
                 const visitTimeValue = timeInput.value;
                 const petCount = parseInt(petCountSelect.value);
 
+                // 필수 정보 미입력 시 계산 중단
+                if (!startDateValue || !endDateValue || !visitTimeValue) {
+                    amountDisplay.textContent = '날짜와 시간을 선택해주세요';
+                    detailsDisplay.textContent = '';
+                    submitButton.disabled = true;
+                    return;
+                }
+
+                // 3마리 이상은 별도 협의
                 if (petCount >= 3) {
                     amountDisplay.textContent = '별도 협의';
-                    surchargeDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
+                    detailsDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
                     submitButton.disabled = true;
                     return;
                 }
                 
                 submitButton.disabled = false;
-                let surcharge = 0;
-                let surchargeText = [];
+                
+                const startDate = new Date(startDateValue);
+                const endDate = new Date(endDateValue);
+                
+                // 종료일이 시작일보다 빠르면 계산 중단
+                if (endDate < startDate) {
+                    amountDisplay.textContent = '종료일을 확인해주세요';
+                    detailsDisplay.textContent = '';
+                    submitButton.disabled = true;
+                    return;
+                }
 
-                // 규칙 1: 다견/다묘 할증
+                let totalCost = 0;
+                let totalDays = 0;
+                let appliedSurcharges = new Set();
+
+                // --- 일일 스캔 로직 ---
+                for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                    totalDays++;
+                    let dailyCost = basePrice;
+                    let dailySurcharge = 0;
+
+                    const currentDate = new Date(d);
+                    const dayOfWeek = currentDate.getDay(); // 0=일요일, 6=토요일
+                    const currentDateString = currentDate.toISOString().split('T')[0];
+
+                    // 1. 특별 할증 (사장님 DB 기반)
+                    let specialRate = 0;
+                    for (const period of specialRatePeriods) {
+                        if (currentDateString >= period.start && currentDateString <= period.end) {
+                            specialRate = Math.max(specialRate, period.rate);
+                            appliedSurcharges.add(period.name);
+                        }
+                    }
+
+                    // 2. 주말 할증
+                    let weekendRate = 0;
+                    if (dayOfWeek === 0 || dayOfWeek === 6) {
+                        weekendRate = 5000;
+                        appliedSurcharges.add('주말 할증');
+                    }
+                    
+                    // 특별 할증과 주말 할증 중 더 높은 금액만 적용
+                    dailySurcharge += Math.max(specialRate, weekendRate);
+                    
+                    totalCost += dailyCost + dailySurcharge;
+                }
+
+                // --- 기간 전체에 적용되는 할증 ---
+                let periodSurcharge = 0;
+
+                // 3. 다견/다묘 할증 (전체 기간에 1회)
                 if (petCount > 1) {
-                    surcharge += 5000;
-                    surchargeText.push('다견/다묘 할증');
+                    periodSurcharge += 5000;
+                    appliedSurcharges.add('다견/다묘 할증');
                 }
 
-                if (visitDateValue) {
-                    const visitDate = new Date(visitDateValue);
-                    const day = visitDate.getDay();
-                    const todayForCalc = new Date();
-                    todayForCalc.setHours(0, 0, 0, 0);
-
-                    // 규칙 2: 당일 예약 할증
-                    if (visitDate.getTime() === todayForCalc.getTime()) {
-                        surcharge += 10000;
-                        surchargeText.push('당일 할증');
-                    }
-
-                    // 규칙 3: 주말/공휴일 할증
-                    if (day === 0 || day === 6) {
-                        surcharge += 5000;
-                        surchargeText.push('주말 할증');
-                    }
+                // 4. 야간 할증 (전체 기간에 1회)
+                const hour = parseInt(visitTimeValue.split(':')[0]);
+                if (hour >= 20 || hour < 8) {
+                    periodSurcharge += 5000;
+                    appliedSurcharges.add('야간 할증');
                 }
 
-                if (visitTimeValue) {
-                    const hour = parseInt(visitTimeValue.split(':')[0]);
-                    // 규칙 4: 야간 할증
-                    if (hour >= 20 || hour < 8) {
-                        surcharge += 5000;
-                        surchargeText.push('야간 할증');
-                    }
+                // 5. 당일/임박 예약 할증 (전체 기간에 1회)
+                const now = new Date();
+                const visitDateTime = new Date(`${startDateValue}T${visitTimeValue}`);
+                const diffHours = (visitDateTime - now) / (1000 * 60 * 60);
+                if (diffHours < 24) {
+                    periodSurcharge += 10000;
+                    appliedSurcharges.add('24시간 이내 예약 할증');
                 }
 
-                const totalPrice = basePrice + surcharge;
-                amountDisplay.textContent = `${totalPrice.toLocaleString()} 원`;
-                surchargeDisplay.textContent = surchargeText.length > 0 ? `* 포함된 할증: ${surchargeText.join(', ')}` : '';
+                totalCost += periodSurcharge;
+
+                // --- 최종 결과 표시 ---
+                amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
+                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.  
+` + 
+                                         (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
             }
 
-            serviceSelect.addEventListener('change', calculatePrice);
-            dateInput.addEventListener('change', calculatePrice);
-            timeInput.addEventListener('change', calculatePrice);
-            petCountSelect.addEventListener('change', calculatePrice);
+            // --- 이벤트 리스너 연결 ---
+            [serviceSelect, startDateInput, endDateInput, timeInput, petCountSelect].forEach(el => {
+                el.addEventListener('change', calculatePrice);
+            });
 
+            // --- 예약하기 버튼 클릭 시 Tally로 데이터 전송 ---
             submitButton.addEventListener('click', () => {
-                if (!dateInput.value || !timeInput.value) {
-                    alert('방문 날짜와 시간을 모두 선택해주세요!');
+                if (!startDateInput.value || !endDateInput.value || !timeInput.value) {
+                    alert('모든 항목을 선택해주세요!');
                     return;
                 }
                 
@@ -193,14 +269,17 @@
 
                 const params = new URLSearchParams();
                 params.append('service', serviceName);
-                params.append('date', dateInput.value);
+                params.append('startDate', startDateInput.value);
+                params.append('endDate', endDateInput.value);
                 params.append('time', timeInput.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
                 params.append('price', finalPrice);
+                params.append('surcharges', Array.from(appliedSurcharges).join(', '));
 
                 window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
             });
 
+            // 초기 계산 실행
             calculatePrice();
         });
     </script>
