@@ -38,8 +38,9 @@
         .form-group select, .form-group input {
             width: 100%; padding: 0.9rem; border: 1px solid #ddd;
             border-radius: 0.5rem; font-size: 1rem; appearance: none;
-            background: var(--gray-100);
+            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E' ) no-repeat right .9rem center/12px;
         }
+        .form-group input[type="date"] { background-image: none; }
         .date-group { display: flex; gap: 1rem; }
         .date-group > div { flex: 1; }
 
@@ -87,7 +88,10 @@
             </div>
             <div class="form-group">
                 <label for="visit-time">방문 시간</label>
-                <input type="time" id="visit-time">
+                <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+                <!-- ★★★ 수정된 부분: 불편한 <input type="time">을 제거하고, 쾌적한 <select>로 교체 ★★★ -->
+                <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+                <select id="visit-time"></select>
             </div>
             <div class="form-group">
                 <label for="pet-count">반려동물 마리 수</label>
@@ -108,17 +112,39 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- HTML 요소 가져오기 ---
             const serviceSelect = document.getElementById('service');
             const startDateInput = document.getElementById('start-date');
             const endDateInput = document.getElementById('end-date');
-            const timeInput = document.getElementById('visit-time');
+            const timeSelect = document.getElementById('visit-time'); // ★★★ 수정: timeInput -> timeSelect
             const petCountSelect = document.getElementById('pet-count');
             const amountDisplay = document.querySelector('.price-display .amount');
             const detailsDisplay = document.querySelector('.price-display .details');
             const submitButton = document.getElementById('submit-booking');
 
-            // --- 사장님의 할증 정책 데이터베이스 ---
+            // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+            // ★★★ 신규 기능: '커스텀 시간 선택기'의 시간표를 자동으로 생성하는 로직 ★★★
+            // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+            function populateTimeSelect() {
+                for (let i = 0; i < 24 * 2; i++) {
+                    const hours = Math.floor(i / 2);
+                    const minutes = (i % 2) * 30;
+                    const formattedHours = String(hours).padStart(2, '0');
+                    const formattedMinutes = String(minutes).padStart(2, '0');
+                    const timeValue = `${formattedHours}:${formattedMinutes}`;
+                    
+                    const option = document.createElement('option');
+                    option.value = timeValue;
+                    option.textContent = timeValue;
+                    timeSelect.appendChild(option);
+                }
+                // 기본값으로 오전 9시 선택
+                timeSelect.value = "09:00";
+            }
+            populateTimeSelect();
+
+
+            let appliedSurcharges = new Set();
+
             const specialRatePeriods = [
                 { start: '2025-12-24', end: '2025-12-28', rate: 10000, name: '크리스마스 연휴' },
                 { start: '2025-12-31', end: '2025-12-31', rate: 10000, name: '연말' },
@@ -135,7 +161,6 @@
                 { start: '2026-12-24', end: '2026-12-27', rate: 10000, name: '크리스마스 연휴' }
             ];
 
-            // --- 오늘 이전 날짜 선택 방지 ---
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -144,23 +169,21 @@
             startDateInput.min = todayString;
             endDateInput.min = todayString;
 
-            // --- 핵심 두뇌: 기간 기반 요금 계산 함수 ---
             function calculatePrice() {
                 const basePrice = parseInt(serviceSelect.value);
                 const startDateValue = startDateInput.value;
                 const endDateValue = endDateInput.value;
-                const visitTimeValue = timeInput.value;
+                const visitTimeValue = timeSelect.value; // ★★★ 수정: timeInput -> timeSelect
                 const petCount = parseInt(petCountSelect.value);
 
-                // 필수 정보 미입력 시 계산 중단
+                appliedSurcharges.clear();
+
                 if (!startDateValue || !endDateValue || !visitTimeValue) {
                     amountDisplay.textContent = '날짜와 시간을 선택해주세요';
                     detailsDisplay.textContent = '';
                     submitButton.disabled = true;
                     return;
                 }
-
-                // 3마리 이상은 별도 협의
                 if (petCount >= 3) {
                     amountDisplay.textContent = '별도 협의';
                     detailsDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
@@ -173,7 +196,6 @@
                 const startDate = new Date(startDateValue);
                 const endDate = new Date(endDateValue);
                 
-                // 종료일이 시작일보다 빠르면 계산 중단
                 if (endDate < startDate) {
                     amountDisplay.textContent = '종료일을 확인해주세요';
                     detailsDisplay.textContent = '';
@@ -183,19 +205,15 @@
 
                 let totalCost = 0;
                 let totalDays = 0;
-                let appliedSurcharges = new Set();
 
-                // --- 일일 스캔 로직 ---
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     totalDays++;
                     let dailyCost = basePrice;
                     let dailySurcharge = 0;
-
                     const currentDate = new Date(d);
-                    const dayOfWeek = currentDate.getDay(); // 0=일요일, 6=토요일
+                    const dayOfWeek = currentDate.getDay();
                     const currentDateString = currentDate.toISOString().split('T')[0];
 
-                    // 1. 특별 할증 (사장님 DB 기반)
                     let specialRate = 0;
                     for (const period of specialRatePeriods) {
                         if (currentDateString >= period.start && currentDateString <= period.end) {
@@ -204,36 +222,28 @@
                         }
                     }
 
-                    // 2. 주말 할증
                     let weekendRate = 0;
                     if (dayOfWeek === 0 || dayOfWeek === 6) {
                         weekendRate = 5000;
                         appliedSurcharges.add('주말 할증');
                     }
                     
-                    // 특별 할증과 주말 할증 중 더 높은 금액만 적용
                     dailySurcharge += Math.max(specialRate, weekendRate);
-                    
                     totalCost += dailyCost + dailySurcharge;
                 }
 
-                // --- 기간 전체에 적용되는 할증 ---
                 let periodSurcharge = 0;
-
-                // 3. 다견/다묘 할증 (전체 기간에 1회)
                 if (petCount > 1) {
                     periodSurcharge += 5000;
                     appliedSurcharges.add('다견/다묘 할증');
                 }
 
-                // 4. 야간 할증 (전체 기간에 1회)
                 const hour = parseInt(visitTimeValue.split(':')[0]);
                 if (hour >= 20 || hour < 8) {
                     periodSurcharge += 5000;
                     appliedSurcharges.add('야간 할증');
                 }
 
-                // 5. 당일/임박 예약 할증 (전체 기간에 1회)
                 const now = new Date();
                 const visitDateTime = new Date(`${startDateValue}T${visitTimeValue}`);
                 const diffHours = (visitDateTime - now) / (1000 * 60 * 60);
@@ -244,21 +254,18 @@
 
                 totalCost += periodSurcharge;
 
-                // --- 최종 결과 표시 ---
                 amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
                 detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.  
 ` + 
                                          (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
             }
 
-            // --- 이벤트 리스너 연결 ---
-            [serviceSelect, startDateInput, endDateInput, timeInput, petCountSelect].forEach(el => {
+            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect].forEach(el => { // ★★★ 수정: timeInput -> timeSelect
                 el.addEventListener('change', calculatePrice);
             });
 
-            // --- 예약하기 버튼 클릭 시 Tally로 데이터 전송 ---
             submitButton.addEventListener('click', () => {
-                if (!startDateInput.value || !endDateInput.value || !timeInput.value) {
+                if (!startDateInput.value || !endDateInput.value || !timeSelect.value) { // ★★★ 수정: timeInput -> timeSelect
                     alert('모든 항목을 선택해주세요!');
                     return;
                 }
@@ -271,7 +278,7 @@
                 params.append('service', serviceName);
                 params.append('startDate', startDateInput.value);
                 params.append('endDate', endDateInput.value);
-                params.append('time', timeInput.value);
+                params.append('time', timeSelect.value); // ★★★ 수정: timeInput -> timeSelect
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
                 params.append('price', finalPrice);
                 params.append('surcharges', Array.from(appliedSurcharges).join(', '));
@@ -279,7 +286,6 @@
                 window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
             });
 
-            // 초기 계산 실행
             calculatePrice();
         });
     </script>
