@@ -3,258 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>펫시터의 정석 - 부산·대구·울산·창원·포항 전문</title>
-    <meta name="description" content="부산, 대구, 울산, 창원, 포항 지역 전문 방문 펫시터. 1:1 대면 면접으로 검증된 전문가가 안심 돌봄 서비스를 제공합니다.">
+    <title>펫시터의 정석 - 부산, 울산, 대구, 창원, 포항 대표 방문 펫시터</title>
+    <meta name="description" content="낯선 호텔 대신 가장 편안한 우리집에서, 5년 이상 경력의 전문 펫시터가 1:1 맞춤 케어를 제공합니다. 부산, 울산, 대구, 창원, 포항 지역 대표 방문 펫시터.">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        /* --- 기본 스타일 --- */
         :root {
-            --amber-700: #b8860b;
-            --amber-800: #8b6508;
-            --amber-50: #fef3c7;
-            --gray-100: #f3f4f6;
-            --gray-600: #4b5563;
-            --gray-900: #111827;
+            --primary-color: #b8860b; /* 고급스러운 다크 골드 */
+            --secondary-color: #fef3c7; /* 부드러운 앰버 */
+            --text-dark: #111827;
+            --text-light: #4b5563;
+            --white: #ffffff;
+            --gray-light: #f3f4f6;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            background: #fff; 
-            color: var(--gray-900 ); 
-            line-height: 1.7; 
-            word-break: keep-all; 
-            padding-top: 70px;
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--text-dark );
+            line-height: 1.7;
         }
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-
-        /* --- 1. 기본 스타일 (모바일 우선) --- */
-        header {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: white; z-index: 1000; height: 70px;
-            display: flex; align-items: center;
-            border-bottom: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
         }
-        .header-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-size: 1.25rem; font-weight: 900; }
-        .nav-links { display: none; } /* PC에서만 보임 */
-        .reserve-btn {
-            background: var(--amber-700); color: white; padding: 0.6rem 1.2rem;
-            border-radius: 50px; font-weight: 700; font-size: 0.9rem;
-            text-decoration: none; white-space: nowrap; transition: background-color 0.3s;
+        section { text-align: center; }
+        h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 1rem; }
+        .section-subtitle { font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 3rem auto; }
+
+        /* --- 헤더 --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .reserve-btn:hover { background: var(--amber-800); }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--text-dark); text-decoration: none; }
+        .nav-links a { margin-left: 1.5rem; text-decoration: none; color: var(--text-dark); font-weight: 700; }
 
-        .section { padding: 4rem 0; }
-        .section-title { text-align: center; font-size: 1.8rem; font-weight: 900; margin-bottom: 2.5rem; line-height: 1.4; }
-
-        /* --- 2. Hero (계산기 없는 버전) --- */
-        .hero { padding: 4rem 0; text-align: center; background: linear-gradient(to bottom, #fff, #fff9e6); }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; line-height: 1.4; margin-bottom: 1rem; }
-        .hero h1 span { color: var(--amber-700); }
-        .hero p { font-size: 1.1rem; color: var(--gray-600); margin-bottom: 2.5rem; }
-        .hero .reserve-btn-main {
-            display: inline-block;
-            background: var(--amber-700); color: white; padding: 1rem 2.5rem;
-            border-radius: 50px; font-weight: 700; font-size: 1.2rem;
-            text-decoration: none; transition: background-color 0.3s;
+        /* --- 1. 영웅(Hero) 섹션: 마케팅 메시지 집약 --- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1200&q=80' ) no-repeat center center;
+            background-size: cover;
+            color: var(--white);
+            padding: 10rem 2rem 8rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .hero .reserve-btn-main:hover { background: var(--amber-800); }
-
-
-        /* --- 3. 나머지 섹션 스타일 --- */
-        .trust .expert-grid, .review-grid { display: grid; gap: 1.5rem; }
-        .trust .expert-card {
-            background: var(--gray-100); padding: 1.5rem; border-radius: 1rem;
-            display: flex; align-items: flex-start; gap: 1rem;
+        .hero-main-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1.4;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
         }
-        .trust .expert-card .icon-wrapper { width: 32px; height: 32px; flex-shrink: 0; color: var(--amber-700); }
-        .trust .expert-card .icon { width: 100%; height: 100%; }
-        .trust .expert-card .text-wrapper { flex-grow: 1; }
-        .trust .expert-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .trust .expert-card p { font-size: 0.95rem; color: #444; line-height: 1.6; }
-
-        .pricing { background-color: #fff; }
-        .pricing-table {
-            border-collapse: collapse; width: 100%; max-width: 800px; margin: 0 auto 1.5rem;
-            border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            opacity: 0.9;
         }
-        .pricing-table th, .pricing-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .pricing-table thead { background-color: var(--gray-100); }
-        .pricing-table th { font-size: 1rem; font-weight: 700; }
-        .pricing-table td { font-size: 0.95rem; }
-        .pricing-table tbody tr:last-child td { border-bottom: none; }
-        .pricing-table .price { font-weight: 700; color: var(--amber-700); }
-        .pricing-note { text-align: center; font-size: 0.9rem; color: var(--gray-600); max-width: 800px; margin: 0 auto; }
-
-        .gallery { background: #fff; }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .photo-item { height: 200px; border-radius: 1rem; overflow: hidden; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.07); }
-        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        .reviews { background-color: var(--amber-50); }
-        .review-card {
-            background: white; border: 1px solid #eee; padding: 1.5rem; border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+            font-size: 1rem;
+            font-weight: 500;
         }
-        .review-text { font-style: italic; margin-bottom: 1rem; color: #333; font-size: 1rem; }
-        .review-text::before { content: '“'; } .review-text::after { content: '”'; }
-        .review-author { font-weight: 700; color: var(--amber-700); text-align: right; font-size: 0.95rem; }
-
-        /* FAQ Section */
-        .faq .faq-item { border-bottom: 1px solid #eee; }
-        .faq details { padding: 1.25rem 0; }
-        .faq summary {
-            font-size: 1.05rem; font-weight: 700; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            list-style: none; /* 기본 화살표 제거 */
+        .hero-features span { display: flex; align-items: center; gap: 0.5rem; }
+        .hero-cta-link {
+            margin-top: 3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffd700;
+            text-decoration: none;
+            padding: 0.8rem 1.8rem;
+            border: 2px solid #ffd700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
         }
-        .faq summary::-webkit-details-marker { display: none; } /* 크롬, 사파리 화살표 제거 */
-        .faq summary::after { content: '+'; font-size: 1.5rem; color: var(--amber-700); transition: transform 0.2s; }
-        .faq details[open] > summary::after { transform: rotate(45deg); }
-        .faq .faq-answer {
-            padding-top: 1rem;
-            font-size: 0.95rem; line-height: 1.8; color: var(--gray-600);
+        .hero-cta-link:hover { background-color: #ffd700; color: var(--text-dark); }
+
+        /* --- 2. 계산기 섹션 --- */
+        #calculator-section { background-color: var(--gray-light); }
+        .calculator-box {
+            max-width: 550px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: left;
         }
-        .faq-table {
-            border-collapse: collapse; width: 100%; margin: 1rem 0;
-            font-size: 0.9rem;
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .form-group select, .form-group input {
+            width: 100%; padding: 0.9rem; border: 1px solid #ddd;
+            border-radius: 0.5rem; font-size: 1rem; appearance: none;
+            background-color: var(--white);
         }
-        .faq-table th, .faq-table td { border: 1px solid #ddd; padding: 0.6rem; text-align: center; }
-        .faq-table th { background-color: var(--gray-100); font-weight: 700; }
+        .form-group select {
+             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E' );
+             background-repeat: no-repeat;
+             background-position: right .9rem center;
+             background-size: 12px;
+        }
+        .date-group { display: flex; gap: 1rem; }
+        .date-group > div { flex: 1; }
+        .price-display {
+            background: var(--secondary-color);
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .price-display .label { font-size: 1rem; color: var(--text-light); }
+        .price-display .amount { font-size: 2.2rem; font-weight: 900; color: var(--primary-color); }
+        .price-display .details { font-size: 0.9rem; color: var(--text-light); margin-top: 0.75rem; line-height: 1.5; }
+        .submit-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; background: var(--primary-color); color: var(--white);
+            padding: 1rem; border: none; border-radius: 0.75rem;
+            font-size: 1.1rem; font-weight: 700; text-align: center;
+            text-decoration: none; transition: background-color 0.3s; margin-top: 1.5rem;
+            cursor: pointer;
+        }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .spinner {
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        footer { background: #1f2937; color: white; padding: 3rem 1.5rem; text-align: center; font-size: 0.9rem; }
+        /* --- 푸터 --- */
+        .footer { background: var(--text-dark); color: var(--white); padding: 3rem 1.5rem; text-align: center; }
+        .footer p { opacity: 0.7; }
 
-        /* --- 4. 데스크톱 (PC) 화면 스타일 --- */
-        @media (min-width: 768px) {
-            body { padding-top: 88px; }
-            header { height: 88px; }
-            .logo { font-size: 1.8rem; }
-            .nav-links { display: flex; gap: 2.5rem; }
-            .nav-links a { text-decoration: none; color: var(--gray-600); font-weight: 700; font-size: 1.1rem; }
-            .reserve-btn { padding: 0.8rem 2rem; font-size: 1.1rem; }
-
-            .section { padding: 6rem 0; }
-            .section-title { font-size: 2.2rem; margin-bottom: 4rem; }
-
-            .hero { padding: 8rem 0; }
-            .hero h1 { font-size: 3.5rem; }
-            .hero p { font-size: 1.4rem; }
-
-            .trust .expert-grid { grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto; }
-            .trust .expert-card { display: block; padding: 2.5rem; text-align: center; }
-            .trust .expert-card .icon-wrapper { margin: 0 auto 1.5rem; width: 48px; height: 48px; }
-            .trust .expert-card h3 { font-size: 1.5rem; }
-            .trust .expert-card p { font-size: 1.1rem; }
-
-            .gallery .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-            .photo-item { height: 320px; }
-
-            .review-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-            .review-card { padding: 2rem; }
+        /* --- 반응형 --- */
+        @media (max-width: 768px) {
+            .hero-main-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .hero-features { flex-direction: column; gap: 0.8rem; align-items: center; }
+            .nav-links { display: none; } /* 모바일에서는 메뉴 숨김 처리 */
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="container header-inner">
-        <div class="logo">🐾 펫시터의 정석</div>
+
+    <header class="header">
+        <a href="#" class="logo">🐾 펫시터의 정석</a>
         <nav class="nav-links">
-            <a href="#trust">서비스 특징</a>
-            <a href="#pricing">요금 안내</a>
-            <a href="#reviews">이용 후기</a>
-            <a href="#faq">자주 묻는 질문</a>
+            <a href="#calculator-section">요금 계산</a>
+            <a href="#">서비스 소개</a>
+            <a href="#">펫시터 소개</a>
         </nav>
-        <a href="calculator.html" class="reserve-btn">실시간 견적 및 예약</a>
-    </div>
-</header>
+    </header>
 
-<main>
-    <!-- 1. Hero (계산기 없는 버전) -->
-    <section class="hero">
-        <div class="container">
-            <h1>우리 아이, <span>집에서 행복하게</span></h1>
-            <p>부산·대구·울산·창원·포항 전문 방문 펫시터</p>
-            <a href="calculator.html" class="reserve-btn-main">실시간 견적 및 예약하기</a>
-        </div>
-    </section>
-
-    <!-- 2. 서비스 특징 -->
-    <section id="trust" class="trust section">
-        <div class="container">
-            <h2 class="section-title">펫시터의 정석은 무엇이 다른가요?</h2>
-            <div class="expert-grid">
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div class="text-wrapper"><h3>엄격한 펫시터 선발</h3><p>까다로운 서류 심사와 1:1 대면 면접을 통과한 상위 10%의 펫시터만 함께합니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div><div class="text-wrapper"><h3>전원 반려동물 전문가</h3><p>모든 펫시터는 관련 자격증을 보유하거나, 풍부한 반려 경험을 가진 전문가로 구성됩니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><div class="text-wrapper"><h3>실시간 안심 보고</h3><p>돌봄 시작부터 끝까지, 아이의 사진과 영상을 실시간으로 전송해 안심을 더합니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><div class="text-wrapper"><h3>지역 전문 서비스</h3><p>선택과 집중을 통해, 해당 지역의 고객님들께 더 빠르고 안정적인 방문 서비스를 제공합니다.</p></div></div>
+    <main>
+        <section class="hero">
+            <h1 class="hero-main-title">낯선 호텔 대신, 가장 편안한 우리집에서</h1>
+            <p class="hero-subtitle">부산·울산·대구·창원·포항 대표 방문 펫시터</p>
+            
+            <div class="hero-features">
+                <span>✓ 5년 이상 경력</span>
+                <span>✓ 1:1 맞춤 케어</span>
+                <span>✓ 전원 신원인증</span>
             </div>
-        </div>
-    </section>
-    
-    <!-- 3. 사진 갤러리 -->
-    <section id="gallery" class="gallery section">
-        <div class="container">
-            <h2 class="section-title">펫시터님들의 실제 돌봄 사진</h2>
-            <div class="photo-grid">
-                <div class="photo-item"><img src="https://i.postimg.cc/rzFZzqXG/Kakao-Talk-20251225-085021329-04.jpg" alt="따뜻한 포옹"></div>
-                <div class="photo-item"><img src="https://i.postimg.cc/tnTBcNtJ/Kakao-Talk-20251225-085021329-01.jpg" alt="맛있는 식사 시간"></div>
-                <div class="photo-item"><img src="https://i.postimg.cc/hhPZhKWD/Kakao-Talk-20251225-085021329.jpg" alt="편안한 휴식"></div>
+
+            <a href="#calculator-section" class="hero-cta-link">30초 만에 예상 비용 확인하기 →</a>
+        </section>
+
+        <section id="calculator-section" class="container">
+            <h2>실시간 요금 계산</h2>
+            <p class="section-subtitle">방문 원하시는 날짜와 시간을 선택하시면, 30초 만에 예상 비용을 바로 확인하실 수 있습니다.</p>
+            <div class="calculator-box">
+                <div class="form-group">
+                    <label for="service">서비스 종류</label>
+                    <select id="service">
+                        <option value="18000" data-service-name="방문 돌봄 30분">방문 돌봄 30분</option>
+                        <option value="25000" data-service-name="방문 돌봄 60분" selected>방문 돌봄 60분</option>
+                        <option value="32000" data-service-name="방문 돌봄 90분">방문 돌봄 90분</option>
+                        <option value="39000" data-service-name="방문 돌봄 120분">방문 돌봄 120분</option>
+                        <option value="50000" data-service-name="방문 목욕 (소형견)">방문 목욕 (소형견)</option>
+                    </select>
+                </div>
+                <div class="date-group">
+                    <div class="form-group">
+                        <label for="start-date">방문 시작일</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">방문 종료일</label>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="visit-time">방문 시간</label>
+                    <select id="visit-time"></select>
+                </div>
+                <div class="form-group">
+                    <label for="pet-count">반려동물 마리 수</label>
+                    <select id="pet-count">
+                        <option value="1">1 마리</option>
+                        <option value="2">2 마리 (+5,000원)</option>
+                        <option value="3">3 마리 이상 (별도 협의)</option>
+                    </select>
+                </div>
+                <div class="price-display">
+                    <div class="label">예상 돌봄 비용</div>
+                    <div class="amount">날짜와 시간을 선택해주세요</div>
+                    <div class="details"></div>
+                </div>
+                <button id="submit-booking" class="submit-btn">
+                    <span id="submit-text">이 조건으로 예약하기</span>
+                </button>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- 4. 요금 안내 -->
-    <section id="pricing" class="pricing section">
-        <div class="container">
-            <h2 class="section-title">서비스 및 요금 안내</h2>
-            <table class="pricing-table">
-                <thead><tr><th>서비스 종류</th><th>기본 요금</th><th>주요 서비스 내용</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>방문 돌봄 30분</strong></td><td class="price">18,000원</td><td>식사 및 물 교체, 배변 패드 정리, 실내 놀이</td></tr>
-                    <tr><td><strong>방문 돌봄 60분</strong></td><td class="price">25,000원</td><td>30분 서비스 + 짧은 산책 또는 집중 놀이</td></tr>
-                    <tr><td><strong>방문 돌봄 90분</strong></td><td class="price">32,000원</td><td>60분 서비스 + 긴 산책 및 맞춤 케어</td></tr>
-                    <tr><td><strong>방문 돌봄 120분</strong></td><td class="price">39,000원</td><td>90분 서비스 + 추가 산책 및 교감 시간</td></tr>
-                    <tr><td><strong>방문 목욕 (소형견 )</strong></td><td class="price">50,000원</td><td>스트레스 최소화 목욕, 드라이, 기본 위생 미용</td></tr>
-                </tbody>
-            </table>
-            <p class="pricing-note">* 위 요금은 1마리 기준이며, 할증 정책에 따라 추가 요금이 발생할 수 있습니다.  
-* 자세한 할증 정책은 하단의 '자주 묻는 질문'을 참고해 주세요.</p>
-        </div>
-    </section>
+    <footer class="footer">
+        <p>&copy; 2025 펫시터의 정석. All Rights Reserved.</p>
+    </footer>
 
-    <!-- 5. 이용 후기 -->
-    <section id="reviews" class="reviews section">
-        <div class="container">
-            <h2 class="section-title">보호자님들의 생생한 후기</h2>
-            <div class="review-grid">
-                <div class="review-card"><p class="review-text">갑작스러운 출장으로 걱정이 많았는데, 사진을 너무 정성스럽게 보내주셔서 마음 놓고 일 볼 수 있었어요.</p><p class="review-author">대구 수성구 이** 보호자님</p></div>
-                <div class="review-card"><p class="review-text">노령견이라 세심한 케어가 필요했는데, 전문가분이라 그런지 아이 특징을 금방 파악하시더라고요. 정말 감사했습니다.</p><p class="review-author">울산 남구 박** 보호자님</p></div>
-                <div class="review-card"><p class="review-text">낯선 곳을 무서워하는 아이라 호텔은 꿈도 못 꿨는데, 집에서 편안하게 돌봄 받으니 너무 좋네요. 앞으로도 계속 이용할 거예요!</p><p class="review-author">부산 해운대구 김** 보호자님</p></div>
-            </div>
-        </div>
-    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const serviceSelect = document.getElementById('service');
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+            const timeSelect = document.getElementById('visit-time');
+            const petCountSelect = document.getElementById('pet-count');
+            const amountDisplay = document.querySelector('.price-display .amount');
+            const detailsDisplay = document.querySelector('.price-display .details');
+            const submitButton = document.getElementById('submit-booking');
+            const submitText = document.getElementById('submit-text');
 
-    <!-- 6. 자주 묻는 질문 -->
-    <section id="faq" class="faq section">
-        <div class="container">
-            <h2 class="section-title">자주 묻는 질문 (FAQ)</h2>
-            <details class="faq-item"><summary>Q. 어떤 서비스를 제공하나요?</summary><div class="faq-answer"><p>저희는 보호자님이 부재중일 때, 펫시터가 고객님의 집으로 직접 방문하여 아이를 돌봐드리는 '방문 돌봄' 서비스를 전문으로 합니다. 정해진 시간 동안 식사 급여, 배변 처리, 실내 놀이, 산책 등을 진행하며, 요청 시 목욕과 같은 추가 케어도 가능합니다.</p></div></details>
-            <details class="faq-item"><summary>Q. 예약은 어떻게 하나요?</summary><div class="faq-answer"><p>웹사이트 상단의 '실시간 견적 및 예약' 버튼을 누르시면, 모든 할증이 자동으로 계산되는 견적 페이지로 이동합니다. 그곳에서 예상 금액을 확인하신 후, 예약 정보를 입력하시면 간편하게 접수가 완료됩니다.</p></div></details>
-            <details class="faq-item"><summary>Q. 추가 요금이 발생하는 경우가 있나요?</summary><div class="faq-answer"><p>네, 기본적인 서비스 요금 외에 아래와 같은 경우 할증 및 추가 요금이 발생할 수 있습니다. 모든 할증은 실시간 견적 페이지에 자동으로 반영됩니다.</p><table class="faq-table"><thead><tr><th>할증 구분</th><th>적용 조건</th><th>추가 요금</th></tr></thead><tbody><tr><td>당일 예약 할증</td><td>서비스 이용 당일 예약 접수 시</td><td>+ 10,000원</td></tr><tr><td>주말/공휴일 할증</td><td>토, 일요일 및 법정 공휴일</td><td>+ 5,000원</td></tr><tr><td>야간 할증</td><td>오후 8시 ~ 다음날 오전 8시</td><td>+ 5,000원</td></tr><tr><td>명절 할증</td><td>설/추석 연휴 기간 (별도 공지)</td><td>+ 10,000원</td></tr><tr><td>다견/다묘 할증</td><td>2마리부터, 1마리당 추가</td><td>+ 5,000원</td></tr><tr><td>특수 케어 할증</td><td>공격성, 약물 투여, 중/대형견 등</td><td>별도 협의</td></tr></tbody></table></div></details>
-            <details class="faq-item"><summary>Q. 취소 및 환불 규정은 어떻게 되나요?</summary><div class="faq-answer"><p>저희는 다음과 같은 기준으로 취소 및 환불을 처리해 드립니다.  
-- 서비스 시작 72시간 전 취소: <strong>전액 환불</strong>  
-- 서비스 시작 48시간 전 취소: <strong>결제 금액의 70% 환불</strong>  
-- 서비스 시작 24시간 전 취소: <strong>결제 금액의 50% 환불</strong>  
-- 서비스 시작 24시간 이내 또는 서비스 시작 후 취소: <strong>환불 불가</strong>  
-<small>* 예약 확정 시 펫시터의 스케줄이 고정되므로, 부득이하게 수수료가 발생하는 점 양해 부탁드립니다.</small></p></div></details>
-        </div>
-    </section>
-</main>
+            function populateTimeSelect() {
+                for (let i = 0; i < 24 * 2; i++) {
+                    const hours = Math.floor(i / 2);
+                    const minutes = (i % 2) * 30;
+                    const formattedHours = String(hours).padStart(2, '0');
+                    const formattedMinutes = String(minutes).padStart(2, '0');
+                    const timeValue = `${formattedHours}:${formattedMinutes}`;
+                    
+                    const option = document.createElement('option');
+                    option.value = timeValue;
+                    option.textContent = timeValue;
+                    timeSelect.appendChild(option);
+                }
+                timeSelect.value = "09:00";
+            }
+            populateTimeSelect();
 
-<footer>
-    <p>© 2025 펫시터의 정석 | 부산·대구·울산·창원·포항 전문 펫시터 찾기</p>
-</footer>
+            let appliedSurcharges = new Set();
+
+            const specialRatePeriods = [
+                { start: '2025-12-24', end: '2025-12-28', rate: 10000, name: '크리스마스 연휴' },
+                { start: '2025-12-31', end: '2025-12-31', rate: 10000, name: '연말' },
+                { start: '2026-01-01', end: '2026-01-01', rate: 7000, name: '신정' },
+                { start: '2026-02-15', end: '2026-02-18', rate: 10000, name: '설 연휴' },
+                { start: '2026-02-28', end: '2026-03-01', rate: 7000, name: '삼일절 연휴' },
+                { start: '2026-05-05', end: '2026-05-05', rate: 7000, name: '어린이날' },
+                { start: '2026-06-06', end: '2026-06-06', rate: 5000, name: '현충일' },
+                { start: '2026-07-25', end: '2026-08-09', rate: 5000, name: '여름 휴가 시즌' },
+                { start: '2026-08-15', end: '2026-08-15', rate: 5000, name: '광복절' },
+                { start: '2026-09-23', end: '2026-09-26', rate: 10000, name: '추석 연휴' },
+                { start: '2026-10-03', end: '2026-10-03', rate: 5000, name: '개천절' },
+                { start: '2026-10-09', end: '2026-10-09', rate: 5000, name: '한글날' },
+                { start: '2026-12-24', end: '2026-12-27', rate: 10000, name: '크리스마스 연휴' }
+            ];
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayString = `${yyyy}-${mm}-${dd}`;
+            startDateInput.min = todayString;
+            endDateInput.min = todayString;
+
+            function calculatePrice() {
+                const basePrice = parseInt(serviceSelect.value);
+                const startDateValue = startDateInput.value;
+                const endDateValue = endDateInput.value;
+                const visitTimeValue = timeSelect.value;
+                const petCount = parseInt(petCountSelect.value);
+
+                appliedSurcharges.clear();
+
+                if (!startDateValue || !endDateValue || !visitTimeValue) {
+                    amountDisplay.textContent = '날짜와 시간을 선택해주세요';
+                    detailsDisplay.textContent = '';
+                    submitButton.disabled = true;
+                    return;
+                }
+                if (petCount >= 3) {
+                    amountDisplay.textContent = '별도 협의';
+                    detailsDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
+                    submitButton.disabled = true;
+                    return;
+                }
+                
+                submitButton.disabled = false;
+                
+                const startDate = new Date(startDateValue);
+                const endDate = new Date(endDateValue);
+                
+                if (endDate < startDate) {
+                    amountDisplay.textContent = '종료일을 확인해주세요';
+                    detailsDisplay.textContent = '';
+                    submitButton.disabled = true;
+                    return;
+                }
+
+                let totalCost = 0;
+                let totalDays = 0;
+
+                for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                    totalDays++;
+                    let dailyCost = basePrice;
+                    let dailySurcharge = 0;
+                    const currentDate = new Date(d);
+                    const dayOfWeek = currentDate.getDay();
+                    const currentDateString = currentDate.toISOString().split('T')[0];
+
+                    let specialRate = 0;
+                    for (const period of specialRatePeriods) {
+                        if (currentDateString >= period.start && currentDateString <= period.end) {
+                            specialRate = Math.max(specialRate, period.rate);
+                            appliedSurcharges.add(period.name);
+                        }
+                    }
+
+                    let weekendRate = 0;
+                    if (dayOfWeek === 0 || dayOfWeek === 6) {
+                        weekendRate = 5000;
+                        appliedSurcharges.add('주말 할증');
+                    }
+                    
+                    dailySurcharge += Math.max(specialRate, weekendRate);
+                    totalCost += dailyCost + dailySurcharge;
+                }
+
+                let periodSurcharge = 0;
+                if (petCount > 1) {
+                    periodSurcharge += 5000;
+                    appliedSurcharges.add('다견/다묘 할증');
+                }
+
+                const hour = parseInt(visitTimeValue.split(':')[0]);
+                if (hour >= 20 || hour < 8) {
+                    periodSurcharge += 5000;
+                    appliedSurcharges.add('야간 할증');
+                }
+
+                const now = new Date();
+                const visitDateTime = new Date(`${startDateValue}T${visitTimeValue}`);
+                const diffHours = (visitDateTime - now) / (1000 * 60 * 60);
+                if (diffHours < 24) {
+                    periodSurcharge += 10000;
+                    appliedSurcharges.add('24시간 이내 예약 할증');
+                }
+
+                totalCost += periodSurcharge;
+
+                amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
+                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.  
+` + 
+                                         (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
+            }
+
+            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect].forEach(el => {
+                el.addEventListener('change', calculatePrice);
+            });
+
+            submitButton.addEventListener('click', () => {
+                if (!startDateInput.value || !endDateInput.value || !timeSelect.value) {
+                    alert('모든 항목을 선택해주세요!');
+                    return;
+                }
+                
+                submitButton.disabled = true;
+                submitText.textContent = '예약 페이지로 이동 중...';
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner';
+                submitButton.prepend(spinner);
+
+                const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+                const serviceName = selectedOption.getAttribute('data-service-name');
+                const finalPrice = amountDisplay.textContent;
+
+                const params = new URLSearchParams();
+                params.append('service', serviceName);
+                params.append('startDate', startDateInput.value);
+                params.append('endDate', endDateInput.value);
+                params.append('time', timeSelect.value);
+                params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
+                params.append('price', finalPrice);
+                params.append('surcharges', Array.from(appliedSurcharges).join(', '));
+
+                setTimeout(() => {
+                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
+                }, 1000);
+            });
+
+            calculatePrice();
+        });
+    </script>
 </body>
 </html>
