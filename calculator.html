@@ -31,6 +31,7 @@
             max-width: 500px;
         }
         .logo { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 1rem; }
+        .logo a { color: inherit; text-decoration: none; }
         .calculator-box {
             background: white; border-radius: 1rem; padding: 1.5rem;
             box-shadow: 0 8px 30px rgba(0,0,0,0.1); text-align: left;
@@ -50,4 +51,158 @@
             text-align: center; margin-top: 1.5rem;
         }
         .price-display .label { font-size: 1rem; color: var(--gray-600); }
-        .price-display .amount { font-size: 2rem
+        .price-display .amount { font-size: 2rem; font-weight: 900; color: var(--amber-700); }
+        .price-display .surcharge-details { font-size: 0.85rem; color: var(--gray-600); margin-top: 0.5rem; }
+
+        .submit-btn {
+            display: block; width: 100%; background: var(--amber-700); color: white;
+            padding: 1rem; border: none; border-radius: 0.75rem;
+            font-size: 1.1rem; font-weight: 700; text-align: center;
+            text-decoration: none; transition: background-color 0.3s; margin-top: 1.5rem;
+            cursor: pointer;
+        }
+        .submit-btn:hover { background: var(--amber-800); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="calculator-wrapper">
+        <div class="logo"><a href="index.html">🐾 펫시터의 정석</a></div>
+        <div class="calculator-box">
+            <div class="form-group">
+                <label for="service">서비스 종류</label>
+                <select id="service">
+                    <option value="18000" data-service-name="방문 돌봄 30분">방문 돌봄 30분</option>
+                    <option value="25000" data-service-name="방문 돌봄 60분" selected>방문 돌봄 60분</option>
+                    <option value="32000" data-service-name="방문 돌봄 90분">방문 돌봄 90분</option>
+                    <option value="39000" data-service-name="방문 돌봄 120분">방문 돌봄 120분</option>
+                    <option value="50000" data-service-name="방문 목욕 (소형견)">방문 목욕 (소형견)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="visit-date">방문 날짜</label>
+                <input type="date" id="visit-date">
+            </div>
+            <div class="form-group">
+                <label for="visit-time">방문 시간</label>
+                <input type="time" id="visit-time">
+            </div>
+            <div class="form-group">
+                <label for="pet-count">반려동물 마리 수</label>
+                <select id="pet-count">
+                    <option value="1">1 마리</option>
+                    <option value="2">2 마리 (+5,000원)</option>
+                    <option value="3">3 마리 이상 (별도 협의)</option>
+                </select>
+            </div>
+            <div class="price-display">
+                <div class="label">예상 돌봄 비용</div>
+                <div class="amount">0 원</div>
+                <div class="surcharge-details"></div>
+            </div>
+            <button id="submit-booking" class="submit-btn">이 조건으로 예약하기</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const serviceSelect = document.getElementById('service');
+            const dateInput = document.getElementById('visit-date');
+            const timeInput = document.getElementById('visit-time');
+            const petCountSelect = document.getElementById('pet-count');
+            const amountDisplay = document.querySelector('.price-display .amount');
+            const surchargeDisplay = document.querySelector('.price-display .surcharge-details');
+            const submitButton = document.getElementById('submit-booking');
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+            function calculatePrice() {
+                const basePrice = parseInt(serviceSelect.value);
+                const visitDateValue = dateInput.value;
+                const visitTimeValue = timeInput.value;
+                const petCount = parseInt(petCountSelect.value);
+
+                if (petCount >= 3) {
+                    amountDisplay.textContent = '별도 협의';
+                    surchargeDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
+                    submitButton.disabled = true;
+                    return;
+                }
+                
+                submitButton.disabled = false;
+                let surcharge = 0;
+                let surchargeText = [];
+
+                // 규칙 1: 다견/다묘 할증
+                if (petCount > 1) {
+                    surcharge += 5000;
+                    surchargeText.push('다견/다묘 할증');
+                }
+
+                if (visitDateValue) {
+                    const visitDate = new Date(visitDateValue);
+                    const day = visitDate.getDay();
+                    const todayForCalc = new Date();
+                    todayForCalc.setHours(0, 0, 0, 0);
+
+                    // 규칙 2: 당일 예약 할증
+                    if (visitDate.getTime() === todayForCalc.getTime()) {
+                        surcharge += 10000;
+                        surchargeText.push('당일 할증');
+                    }
+
+                    // 규칙 3: 주말/공휴일 할증
+                    if (day === 0 || day === 6) {
+                        surcharge += 5000;
+                        surchargeText.push('주말 할증');
+                    }
+                }
+
+                if (visitTimeValue) {
+                    const hour = parseInt(visitTimeValue.split(':')[0]);
+                    // 규칙 4: 야간 할증
+                    if (hour >= 20 || hour < 8) {
+                        surcharge += 5000;
+                        surchargeText.push('야간 할증');
+                    }
+                }
+
+                const totalPrice = basePrice + surcharge;
+                amountDisplay.textContent = `${totalPrice.toLocaleString()} 원`;
+                surchargeDisplay.textContent = surchargeText.length > 0 ? `* 포함된 할증: ${surchargeText.join(', ')}` : '';
+            }
+
+            serviceSelect.addEventListener('change', calculatePrice);
+            dateInput.addEventListener('change', calculatePrice);
+            timeInput.addEventListener('change', calculatePrice);
+            petCountSelect.addEventListener('change', calculatePrice);
+
+            submitButton.addEventListener('click', () => {
+                if (!dateInput.value || !timeInput.value) {
+                    alert('방문 날짜와 시간을 모두 선택해주세요!');
+                    return;
+                }
+                
+                const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+                const serviceName = selectedOption.getAttribute('data-service-name');
+                const finalPrice = amountDisplay.textContent;
+
+                const params = new URLSearchParams();
+                params.append('service', serviceName);
+                params.append('date', dateInput.value);
+                params.append('time', timeInput.value);
+                params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
+                params.append('price', finalPrice);
+
+                window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
+            });
+
+            calculatePrice();
+        });
+    </script>
+</body>
+</html>
