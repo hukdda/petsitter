@@ -21,7 +21,7 @@
         body { 
             font-family: 'Noto Sans KR', sans-serif; 
             background: #fff; 
-            color: var(--gray-900 ); 
+            color: var(--gray-900  ); 
             line-height: 1.7; 
             word-break: keep-all; 
             padding-top: 70px;
@@ -124,7 +124,26 @@
         .faq-table th, .faq-table td { border: 1px solid #ddd; padding: 0.6rem; text-align: center; }
         .faq-table th { background-color: var(--gray-100); font-weight: 700; }
 
-        footer { background: #1f2937; color: white; padding: 3rem 1.5rem; text-align: center; font-size: 0.9rem; }
+        /* ★★★ 수정된 부분 시작 ★★★ */
+        footer { 
+            background: #1f2937; 
+            color: #d1d5db; /* 글자색 약간 밝게 */
+            padding: 3rem 1.5rem; 
+            text-align: center; 
+            font-size: 0.9rem; 
+        }
+        footer p {
+            margin-bottom: 0.8rem; /* 단락 간격 추가 */
+        }
+        footer a {
+            color: #9ca3af; /* 링크 색상 */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: white; /* 호버 시 색상 변경 */
+        }
+        /* ★★★ 수정된 부분 끝 ★★★ */
 
         /* --- 4. 데스크톱 (PC) 화면 스타일 --- */
         @media (min-width: 768px) {
@@ -216,7 +235,7 @@
                     <tr><td><strong>방문 돌봄 60분</strong></td><td class="price">25,000원</td><td>30분 서비스 + 짧은 산책 또는 집중 놀이</td></tr>
                     <tr><td><strong>방문 돌봄 90분</strong></td><td class="price">32,000원</td><td>60분 서비스 + 긴 산책 및 맞춤 케어</td></tr>
                     <tr><td><strong>방문 돌봄 120분</strong></td><td class="price">39,000원</td><td>90분 서비스 + 추가 산책 및 교감 시간</td></tr>
-                    <tr><td><strong>방문 목욕 (소형견 )</strong></td><td class="price">50,000원</td><td>스트레스 최소화 목욕, 드라이, 기본 위생 미용</td></tr>
+                    <tr><td><strong>방문 목욕 (소형견  )</strong></td><td class="price">50,000원</td><td>스트레스 최소화 목욕, 드라이, 기본 위생 미용</td></tr>
                 </tbody>
             </table>
             <p class="pricing-note">* 위 요금은 1마리 기준이며, 할증 정책에 따라 추가 요금이 발생할 수 있습니다.  
@@ -253,8 +272,19 @@
     </section>
 </main>
 
+<!-- ★★★ 수정된 부분 시작 ★★★ -->
 <footer>
-    <p>© 2025 펫시터의 정석 | 부산·대구·울산·창원·포항 전문 펫시터 찾기</p>
+    <div class="container">
+        <p>
+            <a href="terms.html" target="_blank">이용약관</a> | 
+            <a href="privacy.html" target="_blank">개인정보처리방침</a>
+        </p>
+        <p>© 2025 펫시터의 정석 | 부산·대구·울산·창원·포항 전문 펫시터 찾기</p>
+        <!-- 여기에 사업자 정보 등을 추가할 수 있습니다. -->
+        <!-- <p>상호명: 펫시터의 정석 | 대표: 김사장 | 사업자등록번호: 123-45-67890</p> -->
+    </div>
 </footer>
+<!-- ★★★ 수정된 부분 끝 ★★★ -->
+
 </body>
 </html>
