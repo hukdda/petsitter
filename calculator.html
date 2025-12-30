@@ -17,7 +17,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: linear-gradient(to bottom, #fff, #fff9e6 );
+            background: linear-gradient(to bottom, #fff, #fff9e6  );
             color: var(--gray-900);
             line-height: 1.7;
             padding: 2rem 1.5rem;
@@ -38,7 +38,7 @@
         .form-group select, .form-group input {
             width: 100%; padding: 0.9rem; border: 1px solid #ddd;
             border-radius: 0.5rem; font-size: 1rem; appearance: none;
-            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E' ) no-repeat right .9rem center/12px;
+            background: var(--gray-100) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'  ) no-repeat right .9rem center/12px;
         }
         .form-group input[type="date"] { background-image: none; }
         .date-group { display: flex; gap: 1rem; }
@@ -50,12 +50,43 @@
         .price-display .label { font-size: 1rem; color: var(--gray-600); }
         .price-display .amount { font-size: 2.2rem; font-weight: 900; color: var(--amber-700); }
         .price-display .details { font-size: 0.9rem; color: var(--gray-600); margin-top: 0.75rem; line-height: 1.5; }
+        
+        /* ★★★ 수정된 부분 시작 ★★★ */
+        .terms-group {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.9rem;
+            background-color: #f9f9f9;
+            border-radius: 0.5rem;
+        }
+        .terms-group label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .terms-group input[type="checkbox"] {
+            width: auto;
+            appearance: auto;
+        }
+        .terms-group a {
+            color: var(--amber-700);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .terms-group a:hover {
+            text-decoration: underline;
+        }
+        /* ★★★ 수정된 부분 끝 ★★★ */
+
         .submit-btn {
             display: flex; align-items: center; justify-content: center;
             width: 100%; background: var(--amber-700); color: white;
             padding: 1rem; border: none; border-radius: 0.75rem;
             font-size: 1.1rem; font-weight: 700; text-align: center;
-            text-decoration: none; transition: background-color 0.3s; margin-top: 1.5rem;
+            text-decoration: none; transition: background-color 0.3s; margin-top: 1rem; /* 간격 조정 */
             cursor: pointer;
         }
         .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
@@ -69,6 +100,24 @@
             margin-right: 10px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ★★★ 푸터 추가 ★★★ */
+        footer { 
+            margin-top: 2rem;
+            text-align: center; 
+            font-size: 0.9rem; 
+        }
+        footer p {
+            margin-bottom: 0.8rem;
+        }
+        footer a {
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: var(--amber-700);
+        }
     </style>
 </head>
 <body>
@@ -112,11 +161,34 @@
                 <div class="amount">날짜를 선택해주세요</div>
                 <div class="details"></div>
             </div>
+
+            <!-- ★★★ 수정된 부분 시작 ★★★ -->
+            <div class="terms-group">
+                <label for="agree-terms">
+                    <input type="checkbox" id="agree-terms">
+                    <span>
+                        <a href="terms.html" target="_blank">이용약관</a> 및 
+                        <a href="privacy.html" target="_blank">개인정보처리방침</a>에 동의합니다.
+                    </span>
+                </label>
+            </div>
+            <!-- ★★★ 수정된 부분 끝 ★★★ -->
+
             <button id="submit-booking" class="submit-btn">
                 <span id="submit-text">이 조건으로 예약하기</span>
             </button>
         </div>
+
+        <!-- ★★★ 푸터 추가 ★★★ -->
+        <footer>
+            <p>
+                <a href="terms.html" target="_blank">이용약관</a> | 
+                <a href="privacy.html" target="_blank">개인정보처리방침</a>
+            </p>
+            <p>© 2025 펫시터의 정석</p>
+        </footer>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const serviceSelect = document.getElementById('service');
@@ -128,6 +200,7 @@
             const detailsDisplay = document.querySelector('.price-display .details');
             const submitButton = document.getElementById('submit-booking');
             const submitText = document.getElementById('submit-text');
+            const agreeCheckbox = document.getElementById('agree-terms'); // ★★★ 추가 ★★★
 
             function populateTimeSelect() {
                 for (let i = 0; i < 24 * 2; i++) {
@@ -171,6 +244,14 @@
             startDateInput.min = todayString;
             endDateInput.min = todayString;
 
+            function checkSubmitButtonState() { // ★★★ 함수 추가 ★★★
+                if (agreeCheckbox.checked && startDateInput.value && endDateInput.value && parseInt(petCountSelect.value) < 3) {
+                    submitButton.disabled = false;
+                } else {
+                    submitButton.disabled = true;
+                }
+            }
+
             function calculatePrice() {
                 const basePrice = parseInt(serviceSelect.value);
                 const startDateValue = startDateInput.value;
@@ -182,17 +263,15 @@
                 if (!startDateValue || !endDateValue || !visitTimeValue) {
                     amountDisplay.textContent = '날짜와 시간을 선택해주세요';
                     detailsDisplay.textContent = '';
-                    submitButton.disabled = true;
+                    checkSubmitButtonState(); // ★★★ 호출 추가 ★★★
                     return;
                 }
                 if (petCount >= 3) {
                     amountDisplay.textContent = '별도 협의';
                     detailsDisplay.textContent = '3마리 이상은 전화 문의 주세요.';
-                    submitButton.disabled = true;
+                    checkSubmitButtonState(); // ★★★ 호출 추가 ★★★
                     return;
                 }
-               
-                submitButton.disabled = false;
                
                 const startDate = new Date(startDateValue);
                 const endDate = new Date(endDateValue);
@@ -200,7 +279,7 @@
                 if (endDate < startDate) {
                     amountDisplay.textContent = '종료일을 확인해주세요';
                     detailsDisplay.textContent = '';
-                    submitButton.disabled = true;
+                    checkSubmitButtonState(); // ★★★ 호출 추가 ★★★
                     return;
                 }
                 let totalCost = 0;
@@ -248,14 +327,21 @@
                 totalCost += periodSurcharge;
                 amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
                 detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.` +
-                                         (appliedSurcharges.size > 0 ? `<br>* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
+                                         (appliedSurcharges.size > 0 ? `  
+* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
+                
+                checkSubmitButtonState(); // ★★★ 호출 추가 ★★★
             }
 
-            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect].forEach(el => {
+            [serviceSelect, startDateInput, endDateInput, timeSelect, petCountSelect, agreeCheckbox].forEach(el => { // ★★★ agreeCheckbox 추가 ★★★
                 el.addEventListener('change', calculatePrice);
             });
 
             submitButton.addEventListener('click', () => {
+                if (!agreeCheckbox.checked) { // ★★★ 조건 추가 ★★★
+                    alert('이용약관 및 개인정보처리방침에 동의해주세요.');
+                    return;
+                }
                 if (!startDateInput.value || !endDateInput.value || !timeSelect.value) {
                     alert('모든 항목을 선택해주세요!');
                     return;
@@ -270,9 +356,8 @@
                 const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
                 const serviceName = selectedOption.getAttribute('data-service-name');
 
-                // ★★★ 핵심 수정: 숫자만 추출해서 price 전달 ★★★
-                const priceText = amountDisplay.textContent.trim();  // "120,000 원"
-                const priceValue = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;  // 120000
+                const priceText = amountDisplay.textContent.trim();
+                const priceValue = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
 
                 const params = new URLSearchParams();
                 params.append('service', serviceName);
@@ -280,15 +365,16 @@
                 params.append('endDate', endDateInput.value);
                 params.append('time', timeSelect.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
-                params.append('price', priceValue);  // 숫자만 전달!!
+                params.append('price', priceValue);
                 params.append('surcharges', Array.from(appliedSurcharges).join(', '));
 
                 setTimeout(() => {
-                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString()}`;
+                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
                 }, 1000);
             });
 
-            calculatePrice();
+            calculatePrice(); // 초기 계산
+            checkSubmitButtonState(); // ★★★ 초기 버튼 상태 확인 ★★★
         });
     </script>
 </body>
