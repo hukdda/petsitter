@@ -15,11 +15,11 @@
             --gray-900: #111827;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            background: linear-gradient(to bottom, #fff, #fff9e6 ); 
-            color: var(--gray-900); 
-            line-height: 1.7; 
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(to bottom, #fff, #fff9e6 );
+            color: var(--gray-900);
+            line-height: 1.7;
             padding: 2rem 1.5rem;
             display: flex;
             justify-content: center;
@@ -43,7 +43,6 @@
         .form-group input[type="date"] { background-image: none; }
         .date-group { display: flex; gap: 1rem; }
         .date-group > div { flex: 1; }
-
         .price-display {
             background: var(--amber-50); border-radius: 0.75rem; padding: 1.2rem;
             text-align: center; margin-top: 1.5rem;
@@ -51,7 +50,6 @@
         .price-display .label { font-size: 1rem; color: var(--gray-600); }
         .price-display .amount { font-size: 2.2rem; font-weight: 900; color: var(--amber-700); }
         .price-display .details { font-size: 0.9rem; color: var(--gray-600); margin-top: 0.75rem; line-height: 1.5; }
-
         .submit-btn {
             display: flex; align-items: center; justify-content: center;
             width: 100%; background: var(--amber-700); color: white;
@@ -61,10 +59,7 @@
             cursor: pointer;
         }
         .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
-        
-        /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
-        /* ★★★ 신규 기능: '부드러움'을 위한 로딩 스피너 스타일 (VVIP 컨시어지 서비스) ★★★ */
-        /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
+       
         .spinner {
             width: 20px; height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -118,12 +113,10 @@
                 <div class="details"></div>
             </div>
             <button id="submit-booking" class="submit-btn">
-                <!-- ★★★ 수정된 부분: 버튼 내부 텍스트를 담을 span 추가 ★★★ -->
                 <span id="submit-text">이 조건으로 예약하기</span>
             </button>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const serviceSelect = document.getElementById('service');
@@ -134,7 +127,7 @@
             const amountDisplay = document.querySelector('.price-display .amount');
             const detailsDisplay = document.querySelector('.price-display .details');
             const submitButton = document.getElementById('submit-booking');
-            const submitText = document.getElementById('submit-text'); // ★★★ 추가: 버튼 텍스트 요소
+            const submitText = document.getElementById('submit-text');
 
             function populateTimeSelect() {
                 for (let i = 0; i < 24 * 2; i++) {
@@ -143,7 +136,7 @@
                     const formattedHours = String(hours).padStart(2, '0');
                     const formattedMinutes = String(minutes).padStart(2, '0');
                     const timeValue = `${formattedHours}:${formattedMinutes}`;
-                    
+                   
                     const option = document.createElement('option');
                     option.value = timeValue;
                     option.textContent = timeValue;
@@ -154,7 +147,6 @@
             populateTimeSelect();
 
             let appliedSurcharges = new Set();
-
             const specialRatePeriods = [
                 { start: '2025-12-24', end: '2025-12-28', rate: 10000, name: '크리스마스 연휴' },
                 { start: '2025-12-31', end: '2025-12-31', rate: 10000, name: '연말' },
@@ -185,7 +177,6 @@
                 const endDateValue = endDateInput.value;
                 const visitTimeValue = timeSelect.value;
                 const petCount = parseInt(petCountSelect.value);
-
                 appliedSurcharges.clear();
 
                 if (!startDateValue || !endDateValue || !visitTimeValue) {
@@ -200,22 +191,20 @@
                     submitButton.disabled = true;
                     return;
                 }
-                
+               
                 submitButton.disabled = false;
-                
+               
                 const startDate = new Date(startDateValue);
                 const endDate = new Date(endDateValue);
-                
+               
                 if (endDate < startDate) {
                     amountDisplay.textContent = '종료일을 확인해주세요';
                     detailsDisplay.textContent = '';
                     submitButton.disabled = true;
                     return;
                 }
-
                 let totalCost = 0;
                 let totalDays = 0;
-
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     totalDays++;
                     let dailyCost = basePrice;
@@ -223,7 +212,6 @@
                     const currentDate = new Date(d);
                     const dayOfWeek = currentDate.getDay();
                     const currentDateString = currentDate.toISOString().split('T')[0];
-
                     let specialRate = 0;
                     for (const period of specialRatePeriods) {
                         if (currentDateString >= period.start && currentDateString <= period.end) {
@@ -231,29 +219,25 @@
                             appliedSurcharges.add(period.name);
                         }
                     }
-
                     let weekendRate = 0;
                     if (dayOfWeek === 0 || dayOfWeek === 6) {
                         weekendRate = 5000;
                         appliedSurcharges.add('주말 할증');
                     }
-                    
+                   
                     dailySurcharge += Math.max(specialRate, weekendRate);
                     totalCost += dailyCost + dailySurcharge;
                 }
-
                 let periodSurcharge = 0;
                 if (petCount > 1) {
                     periodSurcharge += 5000;
                     appliedSurcharges.add('다견/다묘 할증');
                 }
-
                 const hour = parseInt(visitTimeValue.split(':')[0]);
                 if (hour >= 20 || hour < 8) {
                     periodSurcharge += 5000;
                     appliedSurcharges.add('야간 할증');
                 }
-
                 const now = new Date();
                 const visitDateTime = new Date(`${startDateValue}T${visitTimeValue}`);
                 const diffHours = (visitDateTime - now) / (1000 * 60 * 60);
@@ -261,12 +245,10 @@
                     periodSurcharge += 10000;
                     appliedSurcharges.add('24시간 이내 예약 할증');
                 }
-
                 totalCost += periodSurcharge;
-
                 amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
-                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.  
-` + 
+                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.
+` +
                                          (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
             }
 
@@ -279,10 +261,7 @@
                     alert('모든 항목을 선택해주세요!');
                     return;
                 }
-                
-                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-                // ★★★ 신규 기능: '부드러운' 이동을 위한 로딩 스피너 활성화 (VVIP 컨시어지 서비스) ★★★
-                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+               
                 submitButton.disabled = true;
                 submitText.textContent = '예약 페이지로 이동 중...';
                 const spinner = document.createElement('div');
@@ -291,23 +270,22 @@
 
                 const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
                 const serviceName = selectedOption.getAttribute('data-service-name');
-                const finalPrice = amountDisplay.textContent;
 
-                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-                // ★★★ 신규 기능: Tally에 데이터를 자동으로 채워주기 위한 '비밀 편지' 작성 ★★★
-                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                // ★★★ 수정된 부분: 숫자만 추출해서 price 전달 ★★★
+                const priceText = amountDisplay.textContent;  // 예: "120,000 원"
+                const priceValue = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;  // 120000
+
                 const params = new URLSearchParams();
                 params.append('service', serviceName);
                 params.append('startDate', startDateInput.value);
                 params.append('endDate', endDateInput.value);
                 params.append('time', timeSelect.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
-                params.append('price', finalPrice);
+                params.append('price', priceValue);  // ← 순수 숫자만 전달
                 params.append('surcharges', Array.from(appliedSurcharges).join(', '));
 
-                // 1초의 '부드러운' 지연 후, 모든 정보가 담긴 URL로 이동
                 setTimeout(() => {
-                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
+                    window.location.href = `https://tally.so/r/Pdp5qx?${params.toString()}`;
                 }, 1000);
             });
 
