@@ -247,8 +247,7 @@
                 }
                 totalCost += periodSurcharge;
                 amountDisplay.textContent = `${totalCost.toLocaleString()} 원`;
-                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.
-` +
+                detailsDisplay.innerHTML = `<strong>${totalDays}일</strong> 동안의 총 예상 비용입니다.\n` +
                                          (appliedSurcharges.size > 0 ? `* 적용 할증: ${Array.from(appliedSurcharges).join(', ')}` : '');
             }
 
@@ -271,8 +270,8 @@
                 const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
                 const serviceName = selectedOption.getAttribute('data-service-name');
 
-                // ★★★ 수정된 부분: 숫자만 추출해서 price 전달 ★★★
-                const priceText = amountDisplay.textContent;  // 예: "120,000 원"
+                // 핵심 수정: 숫자만 추출해서 전달
+                const priceText = amountDisplay.textContent;  // "120,000 원"
                 const priceValue = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;  // 120000
 
                 const params = new URLSearchParams();
@@ -281,7 +280,7 @@
                 params.append('endDate', endDateInput.value);
                 params.append('time', timeSelect.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
-                params.append('price', priceValue);  // ← 순수 숫자만 전달
+                params.append('price', priceValue);  // ← 숫자만 전달!
                 params.append('surcharges', Array.from(appliedSurcharges).join(', '));
 
                 setTimeout(() => {
