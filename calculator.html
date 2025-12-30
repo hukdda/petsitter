@@ -17,7 +17,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: linear-gradient(to bottom, #fff, #fff9e6  );
+            background: linear-gradient(to bottom, #fff, #fff9e6 );
             color: var(--gray-900);
             line-height: 1.7;
             padding: 2rem 1.5rem;
@@ -327,7 +327,7 @@
                 params.append('time', timeSelect.value);
                 params.append('pets', petCountSelect.options[petCountSelect.selectedIndex].text);
                 params.append('price', priceValue);
-                params.append('surcharges', Array.from(appliedSurcharges).join(', '));
+                params.append('details', Array.from(appliedSurcharges).join(', ')); // 'surcharges'를 'details'로 변경!
 
                 setTimeout(() => {
                     window.location.href = `https://tally.so/r/Pdp5qx?${params.toString( )}`;
