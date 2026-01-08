@@ -38,60 +38,87 @@
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
 
+        /* =============== 헤더 수정 =============== */
         header {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: white; z-index: 1000; height: 70px;
-            display: flex; align-items: center;
-            border-bottom: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            background: white; 
+            z-index: 1000; 
+            height: 70px;
+            display: flex; 
+            align-items: center;
+            border-bottom: 1px solid #eee; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 0 1.5rem;
         }
+        
         .header-inner { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             width: 100%; 
-            gap: 1rem;
-        }
-        .logo { 
-            font-size: 1.25rem; 
-            font-weight: 900; 
-            white-space: nowrap;
         }
         
-        /* 헤더 전화번호 - 모든 기기에서 항상 보이게 */
-        .header-phone-main {
+        /* 모바일에서도 보이는 브랜드 */
+        .logo { 
+            font-size: 1.2rem; 
+            font-weight: 900; 
+            white-space: nowrap;
+            color: var(--amber-700);
+            display: flex !important;
+            align-items: center;
+        }
+        
+        .logo::before {
+            content: "🐾";
+            margin-right: 6px;
+            font-size: 1rem;
+        }
+        
+        /* 헤더 오른쪽 전화번호 */
+        .header-right {
             display: flex;
             align-items: center;
-            margin: 0;
-            flex-shrink: 0;
+            gap: 10px;
         }
-        .header-phone-link {
+        
+        .header-phone-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+        
+        .header-phone {
             color: var(--amber-700);
             font-weight: 900;
             text-decoration: none;
             font-size: 1rem;
             white-space: nowrap;
-            padding: 8px 12px;
-            border-radius: 6px;
-            background: rgba(184, 134, 11, 0.08);
-            transition: all 0.2s ease;
-            display: inline-block;
-            text-align: center;
-            min-width: 160px;
-        }
-        .header-phone-link:hover {
-            background: rgba(184, 134, 11, 0.15);
-            text-decoration: none;
-            transform: translateY(-1px);
         }
         
-        /* 상담시간 작게 표시 */
-        .phone-time-small {
+        .header-time {
             font-size: 0.75rem;
             color: var(--gray-600);
-            text-align: center;
-            margin-top: 3px;
             font-weight: 500;
             line-height: 1.3;
+            margin-top: 2px;
+        }
+        
+        /* 모바일 전화 버튼 - 숨김 */
+        .mobile-call-btn {
+            display: none;
+            background: var(--amber-700);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
         }
 
         /* 데스크톱 메뉴 */
@@ -104,150 +131,420 @@
             display: none;
         }
 
-        .section { padding: 4rem 0; }
+        .section { padding: 5rem 0; }
         .section-title { 
             text-align: center; 
-            font-size: 1.8rem; 
-            font-weight: 900; 
-            margin-bottom: 2.5rem; 
+            font-size: 2rem; 
+            font-weight: 800; 
+            margin-bottom: 3rem; 
             line-height: 1.4;
             word-break: keep-all;
+            color: #1a1a1a;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--amber-700);
+            margin: 1rem auto 0;
+            border-radius: 2px;
         }
 
+        /* =============== 히어로 섹션 수정 =============== */
         .hero { 
-            padding: 4rem 0; 
-            text-align: center; 
-            background: linear-gradient(to bottom, #fff, #fff9e6);
+            position: relative;
+            min-height: 85vh;
+            overflow: hidden;
+            padding: 0;
         }
-        .hero h1 { 
-            font-size: 2rem;
-            font-weight: 900; 
-            line-height: 1.4; 
+        
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+        }
+        
+        /* 더 진한 오버레이 */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: absolute;
+            top: 20%; /* 상단으로 크게 올림 */
+            left: 4%;
+            transform: translateY(-50%);
+            color: white;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        /* 히어로 브랜드명 */
+        .hero-brand {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1.2;
             margin-bottom: 1.5rem;
-            color: var(--gray-900);
+            color: white;
         }
-        .hero h1 span { color: var(--amber-700); }
-        .hero .region { 
-            font-size: 1.4rem;
-            font-weight: 700; 
-            color: var(--amber-700);
-            margin-bottom: 0.5rem;
+        
+        /* 지역 표시 */
+        .hero-region {
+            font-size: 1.6rem;
+            font-weight: 800;
             line-height: 1.3;
+            margin-bottom: 1.2rem;
+            letter-spacing: -0.5px;
+            color: white;
         }
-        .hero .region-full {
-            font-size: 1rem;
-            color: var(--gray-600);
-            margin-bottom: 2.5rem;
-            line-height: 1.5;
+        
+        /* 1:1 면접 검증 */
+        .hero-interview {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+            color: #fff;
+            border-left: 3px solid #FFD700;
+            padding-left: 0.8rem;
         }
-        .hero .reserve-btn-main {
+        
+        /* 현지에 직주... 설명 */
+        .hero-desc {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            color: rgba(255,255,255,0.95);
+        }
+        
+        /* 돌봄 비용 확인하기 버튼 */
+        .hero-cta-area {
+            margin-bottom: 3rem;
+        }
+        
+        .hero-cta-button {
             display: inline-block;
-            background: var(--amber-700); color: white; padding: 1rem 2rem;
-            border-radius: 50px; font-weight: 700; font-size: 1rem;
-            text-decoration: none; transition: background-color 0.3s;
-            width: 90%; max-width: 300px;
+            background: linear-gradient(135deg, #FF6B6B, #FF5252);
+            color: white;
+            padding: 0.7rem 1.8rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.35);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
-        .hero .reserve-btn-main:hover { background: var(--amber-800); }
+        
+        .hero-cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.45);
+        }
 
-        .trust .expert-grid, .review-grid { display: grid; gap: 1.5rem; }
+        /* =============== 신뢰 섹션 =============== */
+        .trust { 
+            background: #f8f5f0;
+        }
+        
+        .trust .expert-grid { 
+            display: grid; 
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
         .trust .expert-card {
-            background: var(--gray-100); padding: 1.5rem; border-radius: 1rem;
-            display: flex; align-items: flex-start; gap: 1rem;
+            background: white; 
+            padding: 2rem; 
+            border-radius: 12px;
+            border-left: 4px solid var(--amber-700);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
         }
-        .trust .expert-card .icon-wrapper { width: 32px; height: 32px; flex-shrink: 0; color: var(--amber-700); }
-        .trust .expert-card .icon { width: 100%; height: 100%; }
-        .trust .expert-card .text-wrapper { flex-grow: 1; }
-        .trust .expert-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .trust .expert-card p { font-size: 0.95rem; color: #444; line-height: 1.6; }
+        
+        .trust .expert-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .trust .expert-card .icon-wrapper { 
+            width: 48px; 
+            height: 48px; 
+            flex-shrink: 0; 
+            color: var(--amber-700); 
+            margin-bottom: 1.5rem;
+        }
+        
+        .trust .expert-card .icon { 
+            width: 100%; 
+            height: 100%; 
+        }
+        
+        .trust .expert-card h3 { 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            margin-bottom: 1rem; 
+            color: #1a1a1a;
+        }
+        
+        .trust .expert-card p { 
+            font-size: 1rem; 
+            color: #444; 
+            line-height: 1.6; 
+        }
 
-        .pricing { background-color: #fff; }
-        .pricing-table {
-            border-collapse: collapse; width: 100%; max-width: 800px; margin: 0 auto 1.5rem;
-            border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        /* =============== 갤러리 섹션 =============== */
+        .gallery { 
+            background: #fff; 
         }
-        .pricing-table th, .pricing-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .pricing-table thead { background-color: var(--gray-100); }
-        .pricing-table th { font-size: 1rem; font-weight: 700; }
-        .pricing-table td { font-size: 0.95rem; }
-        .pricing-table tbody tr:last-child td { border-bottom: none; }
-        .pricing-table .price { font-weight: 700; color: var(--amber-700); }
+        
+        .gallery .section-title {
+            text-align: center;
+        }
+        
+        .photo-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .photo-item { 
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden; 
+            position: relative; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .photo-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* =============== 요금표 섹션 =============== */
+        .pricing { 
+            background-color: #f8f5f0; 
+        }
+        
+        .pricing .section-title {
+            text-align: center;
+        }
+        
+        .pricing-table {
+            border-collapse: collapse; 
+            width: 100%; 
+            max-width: 900px; 
+            margin: 0 auto 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: white;
+        }
+        
+        .pricing-table thead { 
+            background-color: var(--amber-700);
+        }
+        
+        .pricing-table th { 
+            padding: 1.2rem; 
+            text-align: left; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: white;
+        }
+        
+        .pricing-table td { 
+            padding: 1.2rem; 
+            text-align: left; 
+            border-bottom: 1px solid #eee; 
+            font-size: 1rem; 
+        }
+        
+        .pricing-table tbody tr:last-child td { 
+            border-bottom: none; 
+        }
+        
+        .pricing-table .price { 
+            font-weight: 800; 
+            color: var(--amber-700); 
+            font-size: 1.1rem;
+        }
+        
         .pricing-note { 
             text-align: center; 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
             color: var(--gray-600); 
             max-width: 800px; 
             margin: 0 auto;
             line-height: 1.6;
             padding: 0 1rem;
         }
-        .pricing-note-line {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
 
-        .gallery { background: #fff; }
-        .photo-grid { 
+        /* =============== 후기 섹션 =============== */
+        .reviews { 
+            background-color: #fff; 
+        }
+        
+        .reviews .section-title {
+            text-align: center;
+        }
+        
+        .review-grid { 
             display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 0.8rem;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
-        .photo-item { 
-            height: 180px;
-            border-radius: 0.8rem;
-            overflow: hidden; 
-            position: relative; 
-            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-        }
-        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        .reviews { background-color: var(--amber-50); }
+        
         .review-card {
-            background: white; border: 1px solid #eee; padding: 1.5rem; border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            background: #f8f5f0; 
+            padding: 2rem; 
+            border-radius: 12px;
+            border-left: 4px solid var(--amber-700);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            height: 100%;
         }
-        .review-text { font-style: italic; margin-bottom: 1rem; color: #333; font-size: 0.95rem; }
-        .review-text::before { content: '"'; } .review-text::after { content: '"'; }
-        .review-author { font-weight: 700; color: var(--amber-700); text-align: right; font-size: 0.9rem; }
-
-        .faq .faq-item { border-bottom: 1px solid #eee; }
-        .faq details { padding: 1.25rem 0; }
-        .faq summary {
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .review-text { 
+            font-style: italic; 
+            margin-bottom: 1.5rem; 
+            color: #333; 
             font-size: 1rem;
-            font-weight: 700; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            list-style: none;
+            line-height: 1.6;
         }
-        .faq summary::-webkit-details-marker { display: none; }
-        .faq summary::after { content: '+'; font-size: 1.3rem; color: var(--amber-700); transition: transform 0.2s; }
-        .faq details[open] > summary::after { transform: rotate(45deg); }
+        
+        .review-author { 
+            font-weight: 700; 
+            color: var(--amber-700); 
+            text-align: right; 
+            font-size: 0.95rem; 
+        }
+
+        /* =============== FAQ 섹션 =============== */
+        .faq { 
+            background-color: #f8f5f0; 
+        }
+        
+        .faq .section-title {
+            text-align: center;
+        }
+        
+        .faq .faq-item { 
+            border-bottom: 1px solid #ddd; 
+            margin-bottom: 1rem;
+        }
+        
+        .faq details { 
+            padding: 1.5rem 0; 
+        }
+        
+        .faq summary {
+            font-size: 1.1rem;
+            font-weight: 700; 
+            cursor: pointer;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            list-style: none;
+            color: #1a1a1a;
+        }
+        
+        .faq summary::-webkit-details-marker { 
+            display: none; 
+        }
+        
+        .faq summary::after { 
+            content: '+'; 
+            font-size: 1.5rem; 
+            color: var(--amber-700); 
+            transition: transform 0.2s; 
+        }
+        
+        .faq details[open] > summary::after { 
+            transform: rotate(45deg); 
+        }
+        
         .faq .faq-answer {
             padding-top: 1rem;
-            font-size: 0.9rem; line-height: 1.8; color: var(--gray-600);
+            font-size: 1rem; 
+            line-height: 1.8; 
+            color: var(--gray-600);
         }
+        
         .faq-table {
-            border-collapse: collapse; width: 100%; margin: 1rem 0;
-            font-size: 0.85rem;
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .faq-table th, .faq-table td { border: 1px solid #ddd; padding: 0.5rem; text-align: center; }
-        .faq-table th { background-color: var(--gray-100); font-weight: 700; }
+        
+        .faq-table th, .faq-table td { 
+            border: 1px solid #eee; 
+            padding: 0.8rem; 
+            text-align: center; 
+        }
+        
+        .faq-table th { 
+            background-color: var(--amber-50); 
+            font-weight: 700; 
+        }
 
         footer { 
             background: #1f2937; 
             color: #d1d5db;
-            padding: 2.5rem 1.5rem;
+            padding: 3rem 1.5rem;
             text-align: center; 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
         }
+        
         footer p {
             margin-bottom: 0.8rem;
             line-height: 1.5;
         }
+        
         footer a {
             color: #9ca3af;
             text-decoration: none;
             transition: color 0.3s;
         }
+        
         footer a:hover {
             color: white;
         }
@@ -263,20 +560,24 @@
             margin-left: auto;
             margin-right: auto;
         }
+        
         .contact-item {
             display: flex;
             flex-direction: column;
         }
+        
         .contact-item strong {
             color: #fff;
             font-size: 0.9rem;
             margin-bottom: 0.3rem;
         }
+        
         .contact-item a, .contact-item span {
             color: #d1d5db;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-decoration: none;
         }
+        
         .contact-item a:hover {
             color: #fff;
         }
@@ -289,6 +590,7 @@
             z-index: 9999;
             display: none;
         }
+        
         .call-now-btn {
             display: inline-block;
             background: var(--amber-700);
@@ -302,6 +604,7 @@
             transition: all 0.3s ease;
             white-space: nowrap;
         }
+        
         .call-now-btn:hover {
             background: var(--amber-800);
             transform: translateY(-2px);
@@ -311,16 +614,20 @@
         /* 데스크톱 스타일 */
         @media (min-width: 768px) {
             body { padding-top: 88px; }
-            header { height: 88px; }
-            .logo { font-size: 1.8rem; }
-            
-            /* 데스크톱 헤더 전화번호 */
-            .header-phone-link {
-                font-size: 1.1rem;
-                min-width: 180px;
-                padding: 10px 16px;
+            header { 
+                height: 88px; 
+                padding: 0 2rem;
             }
-            .phone-time-small {
+            
+            .logo { 
+                font-size: 1.5rem; 
+            }
+            
+            .header-phone {
+                font-size: 1.1rem;
+            }
+            
+            .header-time {
                 font-size: 0.8rem;
             }
             
@@ -331,11 +638,17 @@
                 margin-left: auto;
                 margin-right: 2rem;
             }
+            
             .nav-links a { 
                 text-decoration: none; 
                 color: var(--gray-600); 
                 font-weight: 700; 
                 font-size: 1.1rem; 
+                transition: color 0.3s;
+            }
+            
+            .nav-links a:hover {
+                color: var(--amber-700);
             }
             
             .reserve-btn { display: none; }
@@ -343,124 +656,186 @@
             .section { padding: 6rem 0; }
             .section-title { font-size: 2.2rem; margin-bottom: 4rem; }
 
-            .hero { padding: 8rem 0; }
-            .hero h1 { 
-                font-size: 3rem;
-                margin-bottom: 2rem;
+            /* 히어로 데스크톱 */
+            .hero-content {
+                max-width: 550px;
+                left: 8%;
+                top: 20%; /* 상단으로 크게 올림 */
             }
-            .hero .region { 
+            
+            .hero-brand {
+                font-size: 2.5rem;
+            }
+            
+            .hero-region {
                 font-size: 1.8rem;
-                margin-bottom: 0.5rem;
             }
-            .hero .region-full {
-                font-size: 1.3rem;
-                margin-bottom: 3rem;
+            
+            .hero-interview {
+                font-size: 2rem;
             }
-            .hero .reserve-btn-main {
+            
+            .hero-desc {
                 font-size: 1.2rem;
-                padding: 1rem 2.5rem;
-                width: auto;
-                max-width: none;
+            }
+            
+            .hero-cta-button {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
             }
 
-            .trust .expert-grid { grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto; }
-            .trust .expert-card { display: block; padding: 2.5rem; text-align: center; }
-            .trust .expert-card .icon-wrapper { margin: 0 auto 1.5rem; width: 48px; height: 48px; }
-            .trust .expert-card h3 { font-size: 1.5rem; }
-            .trust .expert-card p { font-size: 1.1rem; }
+            .trust .expert-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 2.5rem; 
+            }
+            
+            .trust .expert-card { 
+                padding: 2.5rem; 
+            }
+            
+            .trust .expert-card h3 { 
+                font-size: 1.4rem; 
+            }
+            
+            .trust .expert-card p { 
+                font-size: 1.05rem; 
+            }
 
             /* 데스크톱에서 갤러리 4개 사진 배치 */
             .gallery .photo-grid { 
                 grid-template-columns: repeat(4, 1fr); 
-                gap: 1.5rem; 
+                gap: 2rem; 
             }
+            
             .photo-item { 
-                height: 250px; 
-                border-radius: 1rem;
+                height: 280px; 
             }
 
-            .review-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-            .review-card { padding: 2rem; }
+            .review-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 2.5rem; 
+            }
+            
+            .review-card { 
+                padding: 2.5rem; 
+            }
             
             .pricing-note { 
-                font-size: 0.9rem;
-            }
-            .pricing-note-line {
-                display: inline;
+                font-size: 0.95rem;
             }
             
             .faq summary {
-                font-size: 1.05rem;
+                font-size: 1.15rem;
             }
             
             footer {
-                padding: 3rem 1.5rem;
-                font-size: 0.9rem;
+                padding: 4rem 1.5rem;
+                font-size: 0.95rem;
             }
 
             /* 푸터 연락처 데스크톱 스타일 */
             .footer-contact {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 2rem;
+                max-width: 1000px;
             }
         }
         
         /* 모바일 (767px 이하) */
         @media (max-width: 767px) {
             .section-title {
-                font-size: 1.6rem;
-                margin-bottom: 2rem;
-                padding: 0 0.5rem;
-            }
-            
-            .trust .section-title {
-                font-size: 1.6rem;
-            }
-            
-            .hero h1 {
                 font-size: 1.7rem;
-                line-height: 1.3;
+                margin-bottom: 2.5rem;
                 padding: 0 0.5rem;
             }
             
-            .hero .region {
-                font-size: 1.2rem;
-                padding: 0 0.5rem;
+            /* 헤더 - 모바일에서도 로고 보이게 */
+            .logo {
+                display: flex !important;
+                font-size: 1rem;
             }
             
-            .hero .region-full {
-                font-size: 0.95rem;
-                padding: 0 0.5rem;
+            .header-right {
+                gap: 8px;
+            }
+            
+            /* 모바일에서도 전화번호 박스 표시 */
+            .header-phone-box {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                text-align: right;
+            }
+            
+            .header-phone {
+                font-size: 0.85rem;
+            }
+            
+            .header-time {
+                font-size: 0.7rem;
+                margin-top: 1px;
+            }
+            
+            /* 모바일 전화 버튼 숨김 */
+            .mobile-call-btn {
+                display: none !important;
+            }
+            
+            /* 히어로 모바일 */
+            .hero-content {
+                top: 18%; /* 모바일에서도 상단으로 */
+                left: 5%;
+                width: 90%;
+                transform: translateY(-50%);
+            }
+            
+            /* 모바일에서만 지역 표시 위치 조정 */
+            .hero-brand {
+                font-size: 1.8rem;
+                margin-bottom: 2rem; /* 브랜드 아래 공간 확대 */
+            }
+            
+            .hero-region {
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+                margin-top: 0.5rem; /* 지역 표시를 더 아래로 */
+            }
+            
+            .hero-interview {
+                font-size: 1.5rem;
+                margin-bottom: 0.6rem;
+            }
+            
+            .hero-desc {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .hero-cta-button {
+                width: auto;
+                text-align: center;
+                font-size: 0.9rem;
+                padding: 0.7rem 1.5rem;
             }
             
             .photo-grid {
-                gap: 0.8rem;
+                gap: 1rem;
             }
             
             .photo-item {
-                height: 160px;
+                height: 200px;
             }
             
             .trust .expert-card {
-                padding: 1.2rem;
+                padding: 1.5rem;
             }
             
             .trust .expert-card h3 {
-                font-size: 1.05rem;
+                font-size: 1.2rem;
             }
             
             .trust .expert-card p {
-                font-size: 0.9rem;
-            }
-            
-            /* 모바일 헤더 전화번호 크기 조정 */
-            .header-phone-link {
-                font-size: 0.9rem;
-                min-width: 150px;
-                padding: 6px 10px;
-            }
-            .phone-time-small {
-                font-size: 0.7rem;
+                font-size: 0.95rem;
             }
             
             /* 모바일에서는 플로팅 버튼 표시 */
@@ -476,40 +851,62 @@
             }
             
             .section {
-                padding: 3rem 0;
+                padding: 4rem 0;
             }
             
             .section-title {
                 font-size: 1.5rem;
             }
             
-            .trust .section-title {
-                font-size: 1.5rem;
-            }
-            
             .hero {
-                padding: 3rem 0;
+                min-height: 85vh;
             }
             
-            .hero h1 {
-                font-size: 1.4rem;
+            .hero-content {
+                top: 18%; /* 작은 모바일에서도 상단 유지 */
+                left: 5%;
             }
             
-            .hero .region {
-                font-size: 1.1rem;
+            .hero-brand {
+                font-size: 1.6rem;
+                margin-bottom: 1.8rem; /* 작은 모바일에서도 공간 유지 */
             }
             
-            .hero .region-full {
+            .hero-region {
+                font-size: 1.2rem;
+                margin-top: 0.3rem; /* 작은 모바일에서도 위치 조정 */
+            }
+            
+            .hero-interview {
+                font-size: 1.3rem;
+            }
+            
+            .hero-desc {
                 font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .hero-cta-button {
+                font-size: 0.85rem;
+                padding: 0.6rem 1.2rem;
+            }
+            
+            /* 작은 모바일에서 헤더 전화번호 더 작게 */
+            .header-phone {
+                font-size: 0.8rem;
+            }
+            
+            .header-time {
+                font-size: 0.65rem;
             }
             
             .photo-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 0.6rem;
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
             
             .photo-item {
-                height: 140px;
+                height: 220px;
             }
             
             .pricing-table {
@@ -518,80 +915,72 @@
             
             .pricing-table th, 
             .pricing-table td {
-                padding: 0.7rem 0.5rem;
+                padding: 0.8rem 0.6rem;
             }
             
-            .trust .expert-card {
-                flex-direction: row;
-                text-align: left;
-                gap: 1rem;
+            .trust .expert-grid {
+                grid-template-columns: 1fr;
             }
             
-            .trust .expert-card .icon-wrapper {
-                margin: 0;
-            }
-            
-            /* 작은 모바일 헤더 전화번호 */
-            .header-phone-link {
-                font-size: 0.85rem;
-                min-width: 140px;
-                padding: 5px 8px;
-            }
-            .phone-time-small {
-                font-size: 0.65rem;
+            .footer-contact {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
             
             .logo {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
             }
         }
         
         /* 초소형 모바일 (360px 이하) */
         @media (max-width: 360px) {
             .photo-item {
-                height: 120px;
+                height: 180px;
             }
             
-            .hero h1 {
-                font-size: 1.3rem;
+            .hero-brand {
+                font-size: 1.4rem;
+                margin-bottom: 1.5rem;
             }
             
-            .hero .region {
-                font-size: 1rem;
+            .hero-region {
+                font-size: 1.1rem;
+                margin-top: 0.2rem;
+            }
+            
+            .hero-interview {
+                font-size: 1.2rem;
+            }
+            
+            .hero-desc {
+                font-size: 0.85rem;
+            }
+            
+            .hero-cta-button {
+                font-size: 0.8rem;
+            }
+            
+            /* 초소형 모바일에서 헤더 전화번호 더 작게 */
+            .header-phone {
+                font-size: 0.75rem;
+            }
+            
+            .header-time {
+                font-size: 0.6rem;
             }
             
             .call-now-btn {
                 padding: 10px 16px;
                 font-size: 0.85rem;
             }
-            
-            .header-phone-link {
-                font-size: 0.8rem;
-                min-width: 130px;
-            }
-            .phone-time-small {
-                font-size: 0.6rem;
-            }
-            
-            .logo {
-                font-size: 1rem;
-            }
         }
     </style>
 </head>
 <body>
 <header>
-    <div class="container header-inner">
-        <!-- 로고 -->
-        <div class="logo">🐾 펫시터의 정석</div>
-        
-        <!-- 헤더 전화번호 - 항상 보이게 -->
-        <div class="header-phone-main">
-            <a href="tel:0507-1344-6573" class="header-phone-link">
-                0507-1344-6573
-                <div class="phone-time-small">상담시간 08:00~22:00</div>
-            </a>
-        </div>
+    <div class="header-inner">
+        <!-- 모바일에서도 보이는 브랜드 -->
+        <div class="logo">펫시터의 정석</div>
         
         <!-- 데스크톱 메뉴 -->
         <nav class="nav-links">
@@ -601,94 +990,270 @@
             <a href="#faq">자주 묻는 질문</a>
         </nav>
         
-        <!-- 예약 버튼 (숨김) -->
-        <a href="/calculator.html" class="reserve-btn">실시간 견적 및 예약</a>
+        <!-- 헤더 오른쪽 전화번호 -->
+        <div class="header-right">
+            <div class="header-phone-box">
+                <a href="tel:0507-1344-6573" class="header-phone">0507-1344-6573</a>
+                <div class="header-time">상담시간 08:00~22:00</div>
+            </div>
+            <!-- 모바일 전화 버튼 숨김 -->
+            <a href="tel:0507-1344-6573" class="mobile-call-btn">전화하기</a>
+        </div>
     </div>
 </header>
 
 <main>
+    <!-- =============== 히어로 섹션 =============== -->
     <section class="hero">
-        <div class="container">
-            <h1>출장·여행·야근,<br>반려동물 때문에 망설여지시죠?</h1>
+        <!-- 배경 사진 -->
+        <img src="https://i.imgur.com/bPTZ1Zv.png" 
+             alt="펫시터의 정석 - 부산 대구 울산 창원 포항"
+             class="hero-bg">
+        
+        <!-- 오버레이 -->
+        <div class="hero-overlay"></div>
+        
+        <!-- 모든 텍스트 컨테이너 -->
+        <div class="hero-content">
+            <!-- 1. 브랜드명 (히어로 상단 추가) -->
+            <div class="hero-brand">펫시터의 정석</div>
             
-            <div class="region">부산·대구·울산·창원·포항</div>
-            <div class="region-full">전문 방문 펫시터</div>
+            <!-- 2. 지역 표시 -->
+            <div class="hero-region">부산 · 대구 · 울산<br>창원 · 포항</div>
             
-            <a href="/calculator.html" class="reserve-btn-main">돌봄 비용 확인하기</a>
+            <!-- 3. 1:1 면접 검증 -->
+            <div class="hero-interview">1:1 면접 검증</div>
+            
+            <!-- 4. 현지에 직주... 설명 -->
+            <div class="hero-desc">현지에 직주하는 펫시터가<br>더 빠르게 방문합니다</div>
+            
+            <!-- 5. CTA 버튼 (돌봄 비용 확인하기) -->
+            <div class="hero-cta-area">
+                <a href="/calculator.html" class="hero-cta-button">
+                    돌봄 비용 확인하기 →
+                </a>
+            </div>
         </div>
     </section>
 
+    <!-- =============== 신뢰 섹션 =============== -->
     <section id="trust" class="trust section">
         <div class="container">
             <h2 class="section-title">다른 펫시터와 무엇이 다른가요?</h2>
             <div class="expert-grid">
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div class="text-wrapper"><h3>엄격한 펫시터 선발</h3><p>까다로운 서류 심사와 1:1 대면 면접을 통과한 상위 10%의 펫시터만 함께합니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div><div class="text-wrapper"><h3>전원 반려동물 전문가</h3><p>모든 펫시터는 관련 자격증을 보유하거나, 풍부한 반려 경험을 가진 전문가로 구성됩니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><div class="text-wrapper"><h3>실시간 안심 보고</h3><p>돌봄 시작부터 끝까지, 아이의 사진과 영상을 실시간으로 전송해 안심을 더합니다.</p></div></div>
-                <div class="expert-card"><div class="icon-wrapper"><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><div class="text-wrapper"><h3>지역 전문 서비스</h3><p>선택과 집중을 통해, 해당 지역의 고객님들께 더 빠르고 안정적인 방문 서비스를 제공합니다.</p></div></div>
+                <div class="expert-card">
+                    <div class="icon-wrapper">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-wrapper">
+                        <h3>엄격한 펫시터 선발</h3>
+                        <p>까다로운 서류 심사와 1:1 대면 면접을 통과한 상위 10%의 펫시터만 함께합니다.</p>
+                    </div>
+                </div>
+                <div class="expert-card">
+                    <div class="icon-wrapper">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-wrapper">
+                        <h3>전원 반려동물 전문가</h3>
+                        <p>모든 펫시터는 관련 자격증을 보유하거나, 풍부한 반려 경험을 가진 전문가로 구성됩니다.</p>
+                    </div>
+                </div>
+                <div class="expert-card">
+                    <div class="icon-wrapper">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-wrapper">
+                        <h3>실시간 안심 보고</h3>
+                        <p>돌봄 시작부터 끝까지, 아이의 사진과 영상을 실시간으로 전송해 안심을 더합니다.</p>
+                    </div>
+                </div>
+                <div class="expert-card">
+                    <div class="icon-wrapper">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-wrapper">
+                        <h3>지역 전문 서비스</h3>
+                        <p>선택과 집중을 통해, 해당 지역의 고객님들께 더 빠르고 안정적인 방문 서비스를 제공합니다.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
     
+    <!-- =============== 갤러리 섹션 =============== -->
     <section id="gallery" class="gallery section">
         <div class="container">
             <h2 class="section-title">실제 돌봄 사진</h2>
             <div class="photo-grid">
-                <div class="photo-item"><img src="https://i.postimg.cc/rzFZzqXG/Kakao-Talk-20251225-085021329-04.jpg" alt="따뜻한 포옹"></div>
-                <div class="photo-item"><img src="https://i.postimg.cc/tnTBcNtJ/Kakao-Talk-20251225-085021329-01.jpg" alt="맛있는 식사 시간"></div>
-                <div class="photo-item"><img src="https://i.postimg.cc/hhPZhKWD/Kakao-Talk-20251225-085021329.jpg" alt="편안한 휴식"></div>
-                <div class="photo-item"><img src="https://i.postimg.cc/d1ybKQwD/Kakao_Talk_20251225_085021329_03.jpg" alt="산책 시간"></div>
+                <div class="photo-item">
+                    <img src="https://i.postimg.cc/rzFZzqXG/Kakao-Talk-20251225-085021329-04.jpg" alt="따뜻한 포옹">
+                </div>
+                <div class="photo-item">
+                    <img src="https://i.postimg.cc/tnTBcNtJ/Kakao-Talk-20251225-085021329-01.jpg" alt="맛있는 식사 시간">
+                </div>
+                <div class="photo-item">
+                    <img src="https://i.postimg.cc/hhPZhKWD/Kakao-Talk-20251225-085021329.jpg" alt="편안한 휴식">
+                </div>
+                <div class="photo-item">
+                    <img src="https://i.postimg.cc/d1ybKQwD/Kakao_Talk_20251225_085021329_03.jpg" alt="산책 시간">
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- =============== 요금표 섹션 =============== -->
     <section id="pricing" class="pricing section">
         <div class="container">
             <h2 class="section-title">서비스 및 요금 안내</h2>
             <table class="pricing-table">
-                <thead><tr><th>서비스 종류</th><th>기본 요금</th><th>주요 서비스 내용</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>서비스 종류</th>
+                        <th>기본 요금</th>
+                        <th>주요 서비스 내용</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr><td><strong>방문 돌봄 30분</strong></td><td class="price">18,000원</td><td>식사 및 물 교체, 배변 패드 정리, 실내 놀이</td></tr>
-                    <tr><td><strong>방문 돌봄 60분</strong></td><td class="price">25,000원</td><td>30분 서비스 + 짧은 산책 또는 집중 놀이</td></tr>
-                    <tr><td><strong>방문 돌봄 90분</strong></td><td class="price">32,000원</td><td>60분 서비스 + 긴 산책 및 맞춤 케어</td></tr>
-                    <tr><td><strong>방문 돌봄 120분</strong></td><td class="price">39,000원</td><td>90분 서비스 + 추가 산책 및 교감 시간</td></tr>
-                    <tr><td><strong>방문 목욕 (소형견)</strong></td><td class="price">50,000원</td><td>스트레스 최소화 목욕, 드라이, 기본 위생 미용</td></tr>
+                    <tr>
+                        <td><strong>방문 돌봄 30분</strong></td>
+                        <td class="price">18,000원</td>
+                        <td>식사 및 물 교체, 배변 패드 정리, 실내 놀이</td>
+                    </tr>
+                    <tr>
+                        <td><strong>방문 돌봄 60분</strong></td>
+                        <td class="price">25,000원</td>
+                        <td>30분 서비스 + 짧은 산책 또는 집중 놀이</td>
+                    </tr>
+                    <tr>
+                        <td><strong>방문 돌봄 90분</strong></td>
+                        <td class="price">32,000원</td>
+                        <td>60분 서비스 + 긴 산책 및 맞춤 케어</td>
+                    </tr>
+                    <tr>
+                        <td><strong>방문 돌봄 120분</strong></td>
+                        <td class="price">39,000원</td>
+                        <td>90분 서비스 + 추가 산책 및 교감 시간</td>
+                    </tr>
+                    <tr>
+                        <td><strong>방문 목욕 (소형견)</strong></td>
+                        <td class="price">50,000원</td>
+                        <td>스트레스 최소화 목욕, 드라이, 기본 위생 미용</td>
+                    </tr>
                 </tbody>
             </table>
             <p class="pricing-note">
-                <span class="pricing-note-line">* 위 요금은 1마리 기준이며,</span>
-                <span class="pricing-note-line">할증 정책에 따라 추가 요금이</span>
-                <span class="pricing-note-line">발생할 수 있습니다.</span>
-                <br>
-                <span class="pricing-note-line">* 자세한 할증 정책은 하단의</span>
-                <span class="pricing-note-line">'자주 묻는 질문'을 참고해 주세요.</span>
+                * 위 요금은 1마리 기준이며, 할증 정책에 따라 추가 요금이 발생할 수 있습니다.<br>
+                * 자세한 할증 정책은 하단의 '자주 묻는 질문'을 참고해 주세요.
             </p>
         </div>
     </section>
 
+    <!-- =============== 후기 섹션 =============== -->
     <section id="reviews" class="reviews section">
         <div class="container">
             <h2 class="section-title">보호자님들의<br>생생한 후기</h2>
             <div class="review-grid">
-                <div class="review-card"><p class="review-text">갑작스러운 출장으로 걱정이 많았는데, 사진을 너무 정성스럽게 보내주셔서 마음 놓고 일 볼 수 있었어요.</p><p class="review-author">대구 수성구 이** 보호자님</p></div>
-                <div class="review-card"><p class="review-text">노령견이라 세심한 케어가 필요했는데, 전문가분이라 그런지 아이 특징을 금방 파악하시더라고요. 정말 감사했습니다.</p><p class="review-author">울산 남구 박** 보호자님</p></div>
-                <div class="review-card"><p class="review-text">낯선 곳을 무서워하는 아이라 호텔은 꿈도 못 꿨는데, 집에서 편안하게 돌봄 받으니 너무 좋네요. 앞으로도 계속 이용할 거예요!</p><p class="review-author">부산 해운대구 김** 보호자님</p></div>
+                <div class="review-card">
+                    <p class="review-text">갑작스러운 출장으로 걱정이 많았는데, 사진을 너무 정성스럽게 보내주셔서 마음 놓고 일 볼 수 있었어요.</p>
+                    <p class="review-author">대구 수성구 이** 보호자님</p>
+                </div>
+                <div class="review-card">
+                    <p class="review-text">노령견이라 세심한 케어가 필요했는데, 전문가분이라 그런지 아이 특징을 금방 파악하시더라고요. 정말 감사했습니다.</p>
+                    <p class="review-author">울산 남구 박** 보호자님</p>
+                </div>
+                <div class="review-card">
+                    <p class="review-text">낯선 곳을 무서워하는 아이라 호텔은 꿈도 못 꿨는데, 집에서 편안하게 돌봄 받으니 너무 좋네요. 앞으로도 계속 이용할 거예요!</p>
+                    <p class="review-author">부산 해운대구 김** 보호자님</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- =============== FAQ 섹션 =============== -->
     <section id="faq" class="faq section">
         <div class="container">
             <h2 class="section-title">자주 묻는 질문<br><span style="font-size: 1rem; color: var(--gray-600); font-weight: normal;">(FAQ)</span></h2>
-            <details class="faq-item"><summary>Q. 어떤 서비스를 제공하나요?</summary><div class="faq-answer"><p>저희는 보호자님이 부재중일 때, 펫시터가 고객님의 집으로 직접 방문하여 아이를 돌봐드리는 '방문 돌봄' 서비스를 전문으로 합니다. 정해진 시간 동안 식사 급여, 배변 처리, 실내 놀이, 산책 등을 진행하며, 요청 시 목욕과 같은 추가 케어도 가능합니다.</p></div></details>
-            <details class="faq-item"><summary>Q. 예약은 어떻게 하나요?</summary><div class="faq-answer"><p>웹사이트 상단의 '실시간 견적 및 예약' 버튼을 누르시면, 모든 할증이 자동으로 계산되는 견적 페이지로 이동합니다. 그곳에서 예상 금액을 확인하신 후, 예약 정보를 입력하시면 간편하게 접수가 완료됩니다.</p></div></details>
-            <details class="faq-item"><summary>Q. 추가 요금이 발생하는 경우가 있나요?</summary><div class="faq-answer"><p>네, 기본적인 서비스 요금 외에 아래와 같은 경우 할증 및 추가 요금이 발생할 수 있습니다. 모든 할증은 실시간 견적 페이지에 자동으로 반영됩니다.</p><table class="faq-table"><thead><tr><th>할증 구분</th><th>적용 조건</th><th>추가 요금</th></tr></thead><tbody><tr><td>당일 예약 할증</td><td>서비스 이용 당일 예약 접수 시</td><td>+ 10,000원</td></tr><tr><td>주말/공휴일 할증</td><td>토, 일요일 및 법정 공휴일</td><td>+ 5,000원</td></tr><tr><td>야간 할증</td><td>오후 8시 ~ 다음날 오전 8시</td><td>+ 5,000원</td></tr><tr><td>명절 할증</td><td>설/추석 연휴 기간 (별도 공지)</td><td>+ 10,000원</td></tr><tr><td>다견/다묘 할증</td><td>2마리부터, 1마리당 추가</td><td>+ 5,000원</td></tr><tr><td>특수 케어 할증</td><td>공격성, 약물 투여, 중/대형견 등</td><td>별도 협의</td></tr></tbody></table></div></details>
-            <details class="faq-item"><summary>Q. 취소 및 환불 규정은 어떻게 되나요?</summary><div class="faq-answer"><p>저희는 다음과 같은 기준으로 취소 및 환불을 처리해 드립니다.  
-- 서비스 시작 72시간 전 취소: <strong>전액 환불</strong>  
-- 서비스 시작 48시간 전 취소: <strong>결제 금액의 70% 환불</strong>  
-- 서비스 시작 24시간 전 취소: <strong>결제 금액의 50% 환불</strong>  
-- 서비스 시작 24시간 이내 또는 서비스 시작 후 취소: <strong>환불 불가</strong>  
-<small>* 예약 확정 시 펫시터의 스케줄이 고정되므로, 부득이하게 수수료가 발생하는 점 양해 부탁드립니다.</small></p></div></details>
+            <details class="faq-item">
+                <summary>Q. 어떤 서비스를 제공하나요?</summary>
+                <div class="faq-answer">
+                    <p>저희는 보호자님이 부재중일 때, 펫시터가 고객님의 집으로 직접 방문하여 아이를 돌봐드리는 '방문 돌봄' 서비스를 전문으로 합니다. 정해진 시간 동안 식사 급여, 배변 처리, 실내 놀이, 산책 등을 진행하며, 요청 시 목욕과 같은 추가 케어도 가능합니다.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Q. 예약은 어떻게 하나요?</summary>
+                <div class="faq-answer">
+                    <p>웹사이트 상단의 '실시간 견적 및 예약' 버튼을 누르시면, 모든 할증이 자동으로 계산되는 견적 페이지로 이동합니다. 그곳에서 예상 금액을 확인하신 후, 예약 정보를 입력하시면 간편하게 접수가 완료됩니다.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Q. 추가 요금이 발생하는 경우가 있나요?</summary>
+                <div class="faq-answer">
+                    <p>네, 기본적인 서비스 요금 외에 아래와 같은 경우 할증 및 추가 요금이 발생할 수 있습니다. 모든 할증은 실시간 견적 페이지에 자동으로 반영됩니다.</p>
+                    <table class="faq-table">
+                        <thead>
+                            <tr>
+                                <th>할증 구분</th>
+                                <th>적용 조건</th>
+                                <th>추가 요금</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>당일 예약 할증</td>
+                                <td>서비스 이용 당일 예약 접수 시</td>
+                                <td>+ 10,000원</td>
+                            </tr>
+                            <tr>
+                                <td>주말/공휴일 할증</td>
+                                <td>토, 일요일 및 법정 공휴일</td>
+                                <td>+ 5,000원</td>
+                            </tr>
+                            <tr>
+                                <td>야간 할증</td>
+                                <td>오후 8시 ~ 다음날 오전 8시</td>
+                                <td>+ 5,000원</td>
+                            </tr>
+                            <tr>
+                                <td>명절 할증</td>
+                                <td>설/추석 연휴 기간 (별도 공지)</td>
+                                <td>+ 10,000원</td>
+                            </tr>
+                            <tr>
+                                <td>다견/다묘 할증</td>
+                                <td>2마리부터, 1마리당 추가</td>
+                                <td>+ 5,000원</td>
+                            </tr>
+                            <tr>
+                                <td>특수 케어 할증</td>
+                                <td>공격성, 약물 투여, 중/대형견 등</td>
+                                <td>별도 협의</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Q. 취소 및 환불 규정은 어떻게 되나요?</summary>
+                <div class="faq-answer">
+                    <p>저희는 다음과 같은 기준으로 취소 및 환불을 처리해 드립니다.<br>
+                    - 서비스 시작 72시간 전 취소: <strong>전액 환불</strong><br>
+                    - 서비스 시작 48시간 전 취소: <strong>결제 금액의 70% 환불</strong><br>
+                    - 서비스 시작 24시간 전 취소: <strong>결제 금액의 50% 환불</strong><br>
+                    - 서비스 시작 24시간 이내 또는 서비스 시작 후 취소: <strong>환불 불가</strong><br>
+                    <small>* 예약 확정 시 펫시터의 스케줄이 고정되므로, 부득이하게 수수료가 발생하는 점 양해 부탁드립니다.</small></p>
+                </div>
+            </details>
         </div>
     </section>
 </main>
@@ -754,6 +1319,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 화면 크기 변경 시 체크
     window.addEventListener('resize', checkScreenSize);
+    
+    // 히어로 CTA 버튼 호버 효과
+    const heroCtaButton = document.querySelector('.hero-cta-button');
+    if (heroCtaButton) {
+        heroCtaButton.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 8px 20px rgba(255, 107, 107, 0.45)';
+        });
+        
+        heroCtaButton.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.35)';
+        });
+        
+        heroCtaButton.addEventListener('touchstart', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 6px 15px rgba(255, 107, 107, 0.4)';
+        });
+        
+        heroCtaButton.addEventListener('touchend', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.35)';
+        });
+    }
 });
 </script>
 </body>
