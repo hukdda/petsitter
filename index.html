@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>펫시터의 정석 - 전문가 방문 돌봄 서비스</title>
+    
+    <script>
+      window.__NEXPAY_DIAG = { logs: [], status: 'STARTING' };
+      function log(m) { window.__NEXPAY_DIAG.logs.push(new Date().toLocaleTimeString() + ': ' + m); console.log('[SDK]', m); }
+
+      function detectEngine() {
+        const engine = window.NexPay || window.MePay || window.MagNexPay || window.mepay || window.nexpay;
+        if (engine && typeof (engine.pay || engine.open || engine.request_pay) === 'function') {
+          window.NexPay = engine;
+          return true;
+        }
+        return false;
+      }
+
+      async function tryLoad(url, name) {
+        log('Attempting ' + name + '...');
+        try {
+          const s = document.createElement('script');
+          s.src = url;
+          s.async = true;
+          const p = new Promise((resolve, reject) => {
+            s.onload = () => detectEngine() ? resolve() : reject('OBJ_MISSING');
+            s.onerror = () => reject('NETWORK_ERROR');
+            setTimeout(() => reject('TIMEOUT'), 4500);
+          });
+          document.head.appendChild(s);
+          await p;
+          log('✅ ' + name + ' LOADED');
+          window.__NEXPAY_DIAG.status = 'LOADED';
+          window.__NEXPAY_DIAG.source = name;
+          return true;
+        } catch (e) {
+          log('❌ ' + name + ' FAILED: ' + e);
+          return false;
+        }
+      }
+
+      (async () => {
+        const domain = window.location.hostname || 'lovelypetsitter.com';
+        // 1. 보안 프록시 우선 시도 (가장 안정적)
+        if (await tryLoad('/api/proxy-sdk?domain=' + domain, 'SECURE_PROXY_V3')) return;
+        // 2. 외부 다이렉트 시도
+        if (await tryLoad('https://dev01.ver.ne.magnesy.com/sdk/js/mepay.js', 'MAGNESY_DIRECT')) return;
+        window.__NEXPAY_DIAG.status = 'FAIL';
+      })();
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17329659494"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17329659494');
+    </script>
+    
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { line-height: 1.7; word-break: keep-all; -webkit-font-smoothing: antialiased; }
+      .spinner { width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.1); border-radius: 50%; border-top-color: #b45309; animation: spin 1s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@7.1.5?external=react,react-dom",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-white text-gray-900">
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
