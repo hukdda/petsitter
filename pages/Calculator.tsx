@@ -41,6 +41,7 @@ const Calculator: React.FC = () => {
       });
       setResult(res);
     } catch (e) {
+      console.error('Price Calc Error:', e);
       setResult({ totalCost: service.basePrice, totalDays: 1, surcharges: [] });
     } finally {
       setLoading(false);
@@ -69,8 +70,8 @@ const Calculator: React.FC = () => {
 
   const handleCardPayment = () => {
     const win = window as any;
-    const nex = win.NexPay || win.MePay;
-    if (!nex) return alert('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
+    const nex = win.NexPay || win.MePay || win.MagNexPay;
+    if (!nex) return alert('결제 엔진을 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
 
     const bookingData = {
       ...formData,
@@ -97,7 +98,7 @@ const Calculator: React.FC = () => {
       const payFn = nex.pay || nex.open || nex.request_pay;
       payFn.call(nex, params);
     } catch (e) {
-      alert('결제창 호출에 실패했습니다.');
+      alert('결제창을 여는 중 오류가 발생했습니다.');
     }
   };
 
@@ -108,9 +109,9 @@ const Calculator: React.FC = () => {
         <h2 className="text-3xl font-black mb-4">예약 접수 완료!</h2>
         <p className="text-gray-500 font-bold mb-10 text-sm leading-relaxed">
           {formData.paymentMethod === 'BANK' ? '입금 확인 후 예약이 최종 확정됩니다.' : '결제가 완료되어 예약이 확정되었습니다.'}<br/>
-          전문 시터님이 배정되면 문자를 보내드려요.
+          전문 시터님이 배정되면 안내 문자를 드려요.
         </p>
-        <button onClick={() => window.location.href = '/'} className="w-full bg-gray-900 text-white py-5 rounded-2xl font-black shadow-xl">홈으로 이동</button>
+        <button onClick={() => window.location.href = '/'} className="w-full bg-gray-900 text-white py-5 rounded-2xl font-black shadow-xl">홈으로 가기</button>
       </div>
     </div>
   );
@@ -126,34 +127,34 @@ const Calculator: React.FC = () => {
               <h2 className="text-2xl font-black text-gray-900 tracking-tight">돌봄 견적 확인</h2>
               <div className="space-y-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">돌봄 서비스</label>
-                  <select value={formData.serviceId} onChange={e => setFormData(p => ({...p, serviceId: e.target.value}))} className="w-full p-4 bg-gray-50 rounded-2xl font-black text-amber-900 border-2 border-transparent focus:border-amber-700 outline-none">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Service Type</label>
+                  <select value={formData.serviceId} onChange={e => setFormData(p => ({...p, serviceId: e.target.value}))} className="w-full p-4 bg-gray-50 rounded-2xl font-black text-amber-900 outline-none">
                     {SERVICE_OPTIONS.map(opt => <option key={opt.id} value={opt.id}>{opt.name}</option>)}
                   </select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">시작 날짜</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Start Date</label>
                     <input type="date" value={formData.startDate} onChange={e => setFormData(p => ({...p, startDate: e.target.value}))} className="w-full p-4 bg-gray-50 rounded-2xl font-bold" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">종료 날짜</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">End Date</label>
                     <input type="date" value={formData.endDate} onChange={e => setFormData(p => ({...p, endDate: e.target.value}))} className="w-full p-4 bg-gray-50 rounded-2xl font-bold" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">아이 수</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Pet Count</label>
                     <input type="number" min="1" value={formData.petCount} onChange={e => setFormData(p => ({...p, petCount: Number(e.target.value)}))} className="w-full p-4 bg-gray-50 rounded-2xl font-bold" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">방문 시간</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Time</label>
                     <input type="time" value={formData.visitTime} onChange={e => setFormData(p => ({...p, visitTime: e.target.value}))} className="w-full p-4 bg-gray-50 rounded-2xl font-bold" />
                   </div>
                 </div>
               </div>
               <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100 space-y-2">
-                 <div className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Total Cost</div>
+                 <div className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Expected Total</div>
                  <div className="text-3xl font-[950] text-gray-900">{(result?.totalCost || 0).toLocaleString()}원</div>
                  {result?.surcharges && result.surcharges.length > 0 && (
                    <div className="flex flex-wrap gap-1 pt-2">
@@ -163,7 +164,7 @@ const Calculator: React.FC = () => {
                    </div>
                  )}
               </div>
-              <button onClick={() => setStep('INFO')} className="w-full bg-amber-700 text-white py-6 rounded-2xl font-black shadow-lg">예약자 정보 입력하기</button>
+              <button onClick={() => setStep('INFO')} className="w-full bg-amber-700 text-white py-6 rounded-2xl font-black shadow-lg">예약 정보 입력하기</button>
             </div>
           )}
 
@@ -171,38 +172,37 @@ const Calculator: React.FC = () => {
             <div className="space-y-8 animate-in slide-in-from-right-4">
               <h2 className="text-2xl font-black tracking-tight">정보 입력</h2>
               <div className="space-y-4">
-                <input type="text" placeholder="예약자 성함" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-amber-200" value={formData.userName} onChange={e => setFormData(p => ({...p, userName: e.target.value}))} />
-                <input type="tel" placeholder="연락처 (010-0000-0000)" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-amber-200" value={formData.userPhone} onChange={e => setFormData(p => ({...p, userPhone: e.target.value}))} />
-                <input type="text" placeholder="방문 상세 주소" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-amber-200" value={formData.address} onChange={e => setFormData(p => ({...p, address: e.target.value}))} />
+                <input type="text" placeholder="예약자 성함" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.userName} onChange={e => setFormData(p => ({...p, userName: e.target.value}))} />
+                <input type="tel" placeholder="연락처 (010-0000-0000)" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.userPhone} onChange={e => setFormData(p => ({...p, userPhone: e.target.value}))} />
+                <input type="text" placeholder="방문 주소" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.address} onChange={e => setFormData(p => ({...p, address: e.target.value}))} />
                 <div className="grid grid-cols-2 gap-4">
                    <input type="text" placeholder="아이 이름" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petName} onChange={e => setFormData(p => ({...p, petName: e.target.value}))} />
-                   <input type="text" placeholder="견종/묘종" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petBreed} onChange={e => setFormData(p => ({...p, petBreed: e.target.value}))} />
+                   <input type="text" placeholder="종류 (푸들 등)" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petBreed} onChange={e => setFormData(p => ({...p, petBreed: e.target.value}))} />
                 </div>
-                <textarea placeholder="요청사항 (공동현관 비밀번호 등)" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none h-24 resize-none" value={formData.request} onChange={e => setFormData(p => ({...p, request: e.target.value}))} />
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep('ESTIMATE')} className="flex-1 py-6 rounded-2xl font-bold border-2 border-gray-100 text-gray-400">이전</button>
-                <button onClick={() => setStep('PAYMENT')} className="flex-[2] bg-amber-700 text-white py-6 rounded-2xl font-black shadow-lg">결제 방법 선택</button>
+                <button onClick={() => setStep('PAYMENT')} className="flex-[2] bg-amber-700 text-white py-6 rounded-2xl font-black shadow-lg">결제 진행</button>
               </div>
             </div>
           )}
 
           {step === 'PAYMENT' && (
             <div className="space-y-8 animate-in slide-in-from-right-4">
-              <h2 className="text-2xl font-black tracking-tight">결제 방식</h2>
+              <h2 className="text-2xl font-black tracking-tight text-center">결제 수단 선택</h2>
               <div className="grid grid-cols-1 gap-3">
                 <button onClick={() => setFormData(p => ({...p, paymentMethod: 'CARD'}))} className={`p-6 rounded-[2rem] border-2 text-left flex items-center gap-4 transition-all ${formData.paymentMethod === 'CARD' ? 'border-amber-700 bg-amber-50 shadow-md' : 'border-gray-50 bg-white'}`}>
                   <span className="text-3xl">💳</span>
                   <div>
                     <div className="font-black text-sm text-gray-900">카드 간편 결제</div>
-                    <div className="text-[10px] text-gray-400 font-bold italic">카드사 앱/간편 결제 팝업창 호출</div>
+                    <div className="text-[10px] text-gray-400 font-bold">카드사 앱카드/간편결제 팝업</div>
                   </div>
                 </button>
                 <button onClick={() => setFormData(p => ({...p, paymentMethod: 'BANK'}))} className={`p-6 rounded-[2rem] border-2 text-left flex items-center gap-4 transition-all ${formData.paymentMethod === 'BANK' ? 'border-amber-700 bg-amber-50 shadow-md' : 'border-gray-50 bg-white'}`}>
                   <span className="text-3xl">🏦</span>
                   <div>
                     <div className="font-black text-sm text-gray-900">무통장 입금</div>
-                    <div className="text-[10px] text-gray-400 font-bold italic">계좌 이체 (입금 확인 후 확정)</div>
+                    <div className="text-[10px] text-gray-400 font-bold">계좌 이체 (입금 확인 후 확정)</div>
                   </div>
                 </button>
               </div>
@@ -210,22 +210,20 @@ const Calculator: React.FC = () => {
               {formData.paymentMethod === 'BANK' && (
                 <div className="bg-amber-50/50 p-8 rounded-3xl border border-amber-100 space-y-4">
                   <div className="text-center">
-                    <div className="text-[10px] font-black text-amber-800/50 uppercase tracking-widest mb-1">Account Information</div>
                     <div className="text-lg font-black text-amber-900">대구은행 5081-3446-573</div>
                     <div className="text-sm font-bold text-amber-700">예금주: 박문기(펫시터의정석)</div>
                   </div>
-                  <input type="text" placeholder="입금자명" className="w-full p-4 bg-white rounded-xl font-black text-center shadow-sm border-none outline-none focus:ring-2 focus:ring-amber-200" value={formData.depositorName} onChange={e => setFormData(p => ({...p, depositorName: e.target.value}))} />
-                  <p className="text-[11px] text-gray-400 text-center font-medium leading-relaxed">입금 후 10분 내로 대표님이 확인 문자를 드립니다.</p>
+                  <input type="text" placeholder="입금자명" className="w-full p-4 bg-white rounded-xl font-black text-center shadow-sm" value={formData.depositorName} onChange={e => setFormData(p => ({...p, depositorName: e.target.value}))} />
                 </div>
               )}
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3">
                 <button onClick={() => setStep('INFO')} className="flex-1 py-6 rounded-2xl font-bold border-2 border-gray-100 text-gray-400">이전</button>
                 <button 
                   onClick={formData.paymentMethod === 'BANK' ? handleBankPayment : handleCardPayment} 
-                  className="flex-[2] bg-gray-900 text-white py-6 rounded-2xl font-black shadow-xl hover:bg-black active:scale-95 transition-all"
+                  className="flex-[2] bg-gray-900 text-white py-6 rounded-2xl font-black shadow-xl"
                 >
-                  {(result?.totalCost || 0).toLocaleString()}원 {formData.paymentMethod === 'BANK' ? '예약 신청' : '결제 진행'}
+                  {(result?.totalCost || 0).toLocaleString()}원 {formData.paymentMethod === 'BANK' ? '예약 신청' : '결제 하기'}
                 </button>
               </div>
             </div>
