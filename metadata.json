@@ -1,0 +1,7 @@
+{
+  "name": "펫시터의 정석",
+  "description": "전국 어디서나 전문가가 방문하는 프리미엄 펫케어 서비스",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
