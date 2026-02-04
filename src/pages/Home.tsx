@@ -350,4 +350,4 @@ const Home: React.FC<HomeProps> = ({ user }) => {
   );
 };
 
-export default Home;
+export default Home;.
