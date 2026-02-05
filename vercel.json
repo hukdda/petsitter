@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 {
   "version": 2,
@@ -11,3 +12,16 @@
     { "source": "/(.*)", "destination": "/" }
   ]
 }
+=======
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/auth/social", "destination": "/api/auth.js" },
+    { "source": "/api/admin/:path*", "destination": "/api/admin.js" },
+    { "source": "/api/payment/:path*", "destination": "/api/payment.js" },
+    { "source": "/api/services/:path*", "destination": "/api/services.js" },
+    { "source": "/api/:path*", "destination": "/api/:path*.js" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc

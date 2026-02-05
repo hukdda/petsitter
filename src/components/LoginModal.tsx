@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -21,13 +24,34 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     }
     
     setLoading(provider);
+<<<<<<< HEAD
     const redirectUri = `${window.location.origin}/callback`;
+=======
+    
+    // ✅ 수정됨: 카카오에서 인증 후 /callback 페이지로 코드를 전달받습니다
+    const redirectUri = `${window.location.origin}/callback`; 
+    
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
     localStorage.setItem('social_provider', provider);
     
     if (provider === 'kakao') {
       const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
+<<<<<<< HEAD
       // 심사 통과 전에는 기본 권한만 요청 (안전한 접속 보장)
       const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+=======
+      
+      // ✅ 카카오 인증 페이지로 이동하는 정석 URL 구성
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id: clientId,
+        redirect_uri: redirectUri,
+      });
+
+      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?${params.toString()}`;
+      
+      // 인증 페이지로 이동 (이 코드가 실행되면 노란색 카카오 로그인창이 뜹니다)
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
       window.location.href = kakaoAuthUrl;
     }
   };
@@ -56,7 +80,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             </p>
           </div>
 
+<<<<<<< HEAD
           {/* 카카오 심사팀을 위한 수집항목 고지 섹션 (이게 핵심입니다) */}
+=======
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
           <div className="bg-gray-50 rounded-2xl p-5 mb-8 border border-gray-100">
             <div className="text-[10px] font-black text-amber-700 mb-3 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-amber-700 rounded-full animate-pulse"></span>
@@ -84,7 +111,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               className="w-full h-16 bg-[#FEE500] text-[#191919] rounded-2xl flex items-center justify-center gap-3 font-black transition-all shadow-lg active:scale-95 hover:bg-[#F7E317]"
             >
               {loading === 'kakao' ? (
+<<<<<<< HEAD
                 <div className="spinner border-[#191919]/20 border-t-[#191919] w-5 h-5"></div>
+=======
+                <div className="animate-spin border-2 border-[#191919]/20 border-t-[#191919] w-5 h-5 rounded-full"></div>
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
               ) : (
                 <>
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.48 2 10.791c0 2.758 1.83 5.161 4.587 6.556l-1.159 4.255c-.07.258.21.464.415.303l5.013-3.292c.376.041.76.069 1.144.069 5.523 0 10-3.48 10-7.791S17.523 3 12 3z"/></svg>
@@ -117,4 +148,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
+<<<<<<< HEAD
 export default LoginModal;
+=======
+export default LoginModal;
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
 {
   "name": "pet-sitter-standard",
   "private": true,
@@ -6,6 +9,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+<<<<<<< HEAD
     "build": "node ./node_modules/vite/bin/vite.js build",
     "preview": "vite preview"
   },
@@ -18,12 +22,29 @@
     "react-router-dom": "^7.12.0",
     "express": "^4.18.2",
     "cors": "^2.8.5"
+=======
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^13.6.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.0"
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+<<<<<<< HEAD
     "vite": "^6.0.0",
     "tailwindcss": "^3.4.1"
+=======
+    "tailwindcss": "^3.4.1",
+    "vite": "^6.0.0"
+>>>>>>> eb423f517925f7b12f1d3f3e160c6f538480f8cc
   }
 }
