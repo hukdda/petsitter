@@ -21,9 +21,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     
     setLoading(provider);
     
-    // ✅ 중요: 카카오 인증 후 코드를 받아줄 서버 API 주소입니다.
-    // Vercel의 api/auth.js가 이 경로(/api/auth/social)에서 대기 중이어야 합니다.
-    const redirectUri = `${window.location.origin}/api/auth/social`; 
+    // ✅ 수정됨: 카카오에서 인증 후 /callback 페이지로 코드를 전달받습니다
+    const redirectUri = `${window.location.origin}/callback`; 
     
     localStorage.setItem('social_provider', provider);
     
