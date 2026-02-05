@@ -2,28 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/auth/social",
-      "destination": "/api/auth.js"
-    },
-    {
-      "source": "/api/comments",
-      "destination": "/api/services.js"
-    },
-    {
-      "source": "/api/calculate-price",
-      "destination": "/api/services.js"
-    },
-    {
-      "source": "/api/applications",
-      "destination": "/api/services.js"
-    },
-    {
-      "source": "/api/verify-payment",
-      "destination": "/api/payment.js"
-    },
-    {
-      "source": "/api/admin/:path*",
-      "destination": "/api/admin.js"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
       "source": "/((?!api/).*)",
