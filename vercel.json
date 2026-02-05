@@ -7,6 +7,7 @@
     { "source": "/api/auth/social", "destination": "/api/auth" },
     { "source": "/api/kakao-auth", "destination": "/api/auth" },
     { "source": "/api/admin/data", "destination": "/api/admin" },
-    { "source": "/api/admin/check-api", "destination": "/api/admin" }
+    { "source": "/api/admin/check-api", "destination": "/api/admin" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
