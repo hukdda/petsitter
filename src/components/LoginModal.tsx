@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -21,12 +20,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     }
     
     setLoading(provider);
-    const redirectUri = `${window.location.origin}/callback`;
+    
+    // ✅ 수정 포인트: /callback을 제거하고 메인 주소('/')로 설정하여 404 에러 방지
+    const redirectUri = `${window.location.origin}/`; 
+    
     localStorage.setItem('social_provider', provider);
     
     if (provider === 'kakao') {
       const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
-      // 심사 통과 전에는 기본 권한만 요청 (안전한 접속 보장)
+      // 카카오 인증 페이지로 이동
       const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
       window.location.href = kakaoAuthUrl;
     }
@@ -56,7 +58,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             </p>
           </div>
 
-          {/* 카카오 심사팀을 위한 수집항목 고지 섹션 (이게 핵심입니다) */}
           <div className="bg-gray-50 rounded-2xl p-5 mb-8 border border-gray-100">
             <div className="text-[10px] font-black text-amber-700 mb-3 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-amber-700 rounded-full animate-pulse"></span>

@@ -1,33 +1,35 @@
+import admin from 'firebase-admin';
+
+// 1. 구글 보안 연결 설정 (Vercel 환경 변수 활용)
+const serviceAccount = {
+  projectId: process.env.GOOGLE_PROJECT_ID,
+  clientEmail: process.env.GOOGLE_CLIENT_EMAIL,
+  // private_key 줄바꿈 처리 필수
+  privateKey: process.env.GOOGLE_PRIVATE_KEY 
+    ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
+    : undefined,
+};
+
+// 2. 구글 서비스 초기화
+if (!admin.apps.length) {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    console.log("✅ 구글 데이터베이스(Firestore) 연결 성공!");
+  } catch (error) {
+    console.error("❌ 구글 연결 실패:", error);
+  }
+}
+
+// 3. 실제 DB 도구 내보내기
+export const firestore = admin.firestore();
+
+// 4. 가짜 데이터 삭제 및 빈 그릇 준비
+// 다른 코드들이 'db'를 참조하고 있을 것이므로, 구조는 유지하되 데이터만 비웁니다.
 export const db = {
   applications: [],
   bookings: [],
   payments: [],
-  comments: [
-    {
-      id: 'init_1',
-      author: '김민지',
-      region: '부산 해운대구',
-      content: '처음 맡겨봤는데 시터님이 너무 친절하게 아이 사진도 많이 보내주시고 밥도 잘 챙겨주셔서 안심했어요!',
-      rating: 5,
-      createdAt: '2025-02-10',
-      sitterName: '이지은 시터님',
-      serviceType: '방문돌봄 60분',
-      profileImg: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Minji',
-      relativeTime: '2일 전',
-      isApproved: true
-    },
-    {
-      id: 'init_2',
-      author: '박준형',
-      region: '대구 수성구',
-      content: '갑작스러운 출장으로 예약했는데, 당일 예약임에도 불구하고 너무 친절하게 대응해주셨어요.',
-      rating: 5,
-      createdAt: '2025-02-08',
-      sitterName: '김민석 시터님',
-      serviceType: '방문돌봄 30분',
-      profileImg: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jun',
-      relativeTime: '4일 전',
-      isApproved: true
-    }
-  ]
+  comments: [] // 👈 가짜 '김민지', '박준형' 데이터를 여기서 싹 지웠습니다!
 };
