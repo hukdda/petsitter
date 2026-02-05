@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
@@ -17,7 +16,14 @@ const Home: React.FC<HomeProps> = ({ user }) => {
 
   useEffect(() => {
     api.fetchComments().then(data => {
-      if (Array.isArray(data)) setComments(data);
+      if (Array.isArray(data)) {
+        // ✅ 김민지, 박준형 보호자님의 가짜 후기만 걸러내는 필터링 추가
+        const filteredData = data.filter(comment => 
+          !comment.author.includes('김민지') && 
+          !comment.author.includes('박준형')
+        );
+        setComments(filteredData);
+      }
     });
   }, []);
 
