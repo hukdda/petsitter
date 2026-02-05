@@ -1,13 +1,12 @@
 {
   "rewrites": [
+    { "source": "/api/auth/(.*)", "destination": "/api/auth" },
     { "source": "/api/calculate-price", "destination": "/api/services" },
     { "source": "/api/comments", "destination": "/api/services" },
     { "source": "/api/applications", "destination": "/api/services" },
     { "source": "/api/verify-payment", "destination": "/api/payment" },
-    { "source": "/api/auth/social", "destination": "/api/auth" },
+    { "source": "/api/admin/(.*)", "destination": "/api/admin" },
     { "source": "/api/kakao-auth", "destination": "/api/auth" },
-    { "source": "/api/admin/data", "destination": "/api/admin" },
-    { "source": "/api/admin/check-api", "destination": "/api/admin" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
