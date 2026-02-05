@@ -1,4 +1,4 @@
-import { firestore } from './_db.js';
+import { db } from './_db.js';
 
 export default async function handler(req, res) {
   // 1. CORS 및 기본 헤더 설정
@@ -7,7 +7,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ success: false, message: 'Method Not Allowed' });
+  
+  // GET 방식으로 들어왔을 때 405 에러가 아닌 안내 메시지를 줍니다.
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, message: 'POST 방식만 허용됩니다.' });
+  }
 
   const { code, redirectUri } = req.body;
   const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID || "4e82f00882c1c24d0b83c1e001adce2f";
@@ -46,14 +50,15 @@ export default async function handler(req, res) {
       lastLogin: new Date().toISOString()
     };
 
-    // 5. DB 저장 (가장 차분하게 처리)
+    // 5. DB 저장 (이제 firestore 대신 db를 사용합니다)
     try {
-      if (firestore) {
-        await firestore.collection('users').doc(String(userData.id)).set(user, { merge: true });
+      if (db) {
+        // collection('users')에 사용자 정보를 저장하거나 업데이트합니다.
+        await db.collection('users').doc(String(userData.id)).set(user, { merge: true });
+        console.log(`✅ 유저 ${user.name} DB 저장 완료!`);
       }
     } catch (dbErr) {
       console.error('DB 저장 중 오류 발생:', dbErr);
-      // DB 에러가 나도 로그인은 되게 하려면 여기서 멈추지 않습니다.
     }
 
     return res.status(200).json({ success: true, user });
