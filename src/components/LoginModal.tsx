@@ -21,15 +21,25 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     
     setLoading(provider);
     
-    // ✅ 수정 포인트: /callback을 제거하고 메인 주소('/')로 설정하여 404 에러 방지
-    const redirectUri = `${window.location.origin}/`; 
+    // ✅ 중요: 카카오 인증 후 코드를 받아줄 서버 API 주소입니다.
+    // Vercel의 api/auth.js가 이 경로(/api/auth/social)에서 대기 중이어야 합니다.
+    const redirectUri = `${window.location.origin}/api/auth/social`; 
     
     localStorage.setItem('social_provider', provider);
     
     if (provider === 'kakao') {
       const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
-      // 카카오 인증 페이지로 이동
-      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+      
+      // ✅ 카카오 인증 페이지로 이동하는 정석 URL 구성
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id: clientId,
+        redirect_uri: redirectUri,
+      });
+
+      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?${params.toString()}`;
+      
+      // 인증 페이지로 이동 (이 코드가 실행되면 노란색 카카오 로그인창이 뜹니다)
       window.location.href = kakaoAuthUrl;
     }
   };
@@ -85,7 +95,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               className="w-full h-16 bg-[#FEE500] text-[#191919] rounded-2xl flex items-center justify-center gap-3 font-black transition-all shadow-lg active:scale-95 hover:bg-[#F7E317]"
             >
               {loading === 'kakao' ? (
-                <div className="spinner border-[#191919]/20 border-t-[#191919] w-5 h-5"></div>
+                <div className="animate-spin border-2 border-[#191919]/20 border-t-[#191919] w-5 h-5 rounded-full"></div>
               ) : (
                 <>
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.48 2 10.791c0 2.758 1.83 5.161 4.587 6.556l-1.159 4.255c-.07.258.21.464.415.303l5.013-3.292c.376.041.76.069 1.144.069 5.523 0 10-3.48 10-7.791S17.523 3 12 3z"/></svg>
