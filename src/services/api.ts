@@ -1,5 +1,4 @@
-
-import { PriceCalculationResult, CommentData, PaymentVerificationRequest } from '../types.ts';
+import { PriceCalculationResult, CommentData, PaymentVerificationRequest } from '../types';
 
 const safeFetch = async (url: string, options?: RequestInit) => {
   try {
