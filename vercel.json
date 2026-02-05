@@ -1,13 +1,11 @@
 {
   "version": 2,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/api/auth/social", "destination": "/api/auth.js" },
+    { "source": "/api/admin/:path*", "destination": "/api/admin.js" },
+    { "source": "/api/payment/:path*", "destination": "/api/payment.js" },
+    { "source": "/api/services/:path*", "destination": "/api/services.js" },
+    { "source": "/api/:path*", "destination": "/api/:path*.js" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
