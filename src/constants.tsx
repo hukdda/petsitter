@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ServiceOption } from './types.ts';
+import { ServiceOption } from './types'; // .ts 확장자를 제거하여 빌드 에러 방지
 
 export const SERVICE_OPTIONS: ServiceOption[] = [
   { id: '30m', name: '방문 돌봄 30분', basePrice: 18000 },
@@ -15,3 +14,6 @@ export const REGIONS = [
   '전체', '서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', 
   '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'
 ];
+
+// 대표님이 말씀하신 수수료 30% 반영!
+export const PLATFORM_FEE_RATE = 0.3;
