@@ -4,7 +4,7 @@ import admin from 'firebase-admin';
 const serviceAccount = {
   projectId: process.env.GOOGLE_PROJECT_ID,
   clientEmail: process.env.GOOGLE_CLIENT_EMAIL,
-  // private_key 줄바꿈 처리 필수
+  // privateKey 줄바꿈 처리는 Vercel 배포의 필수 관문입니다!
   privateKey: process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined,
@@ -22,14 +22,8 @@ if (!admin.apps.length) {
   }
 }
 
-// 3. 실제 DB 도구 내보내기
-export const firestore = admin.firestore();
+// 3. 실제 DB 도구 내보내기 (이제 'db'라는 이름으로 진짜 DB를 사용합니다)
+// 기존 코드들이 'db'라는 이름을 쓰고 있을 것이므로, 이름을 'db'로 맞춰서 내보냅니다.
+const db = admin.firestore();
 
-// 4. 가짜 데이터 삭제 및 빈 그릇 준비
-// 다른 코드들이 'db'를 참조하고 있을 것이므로, 구조는 유지하되 데이터만 비웁니다.
-export const db = {
-  applications: [],
-  bookings: [],
-  payments: [],
-  comments: [] // 👈 가짜 '김민지', '박준형' 데이터를 여기서 싹 지웠습니다!
-};
+export { db, admin };
