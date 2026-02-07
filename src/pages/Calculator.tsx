@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 
-// 외부 파일 대신 여기에 직접 설정 (에러 원천 차단!)
 const SERVICE_OPTIONS = [
   { id: 'visit-30', name: '방문 돌봄 30분', basePrice: 18000 },
   { id: 'visit-60', name: '방문 돌봄 60분', basePrice: 25000 },
-  { id: 'walk-30', name: '산책 대행 30분', basePrice: 15000 },
-  { id: 'walk-60', name: '산책 대행 60분', basePrice: 22000 }
+  { id: 'visit-90', name: '방문 돌봄 90분', basePrice: 33000 },
+  { id: 'visit-120', name: '방문 돌봄 120분', basePrice: 40000 },
+  { id: 'dog-bath', name: '강아지 목욕', basePrice: 50000 }
 ];
 
-// 수수료 로직 (방법 B 보안 적용 대비)
-const PLATFORM_FEE_RATE = 0.30; 
+const PLATFORM_FEE_RATE = 0.30;
 
 type Step = 'ESTIMATE' | 'INFO' | 'PAYMENT' | 'SUCCESS';
 
@@ -26,7 +25,6 @@ const Calculator: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PriceCalculationResult | null>(null);
   const [useCustomDates, setUseCustomDates] = useState(false);
-
   const [formData, setFormData] = useState({
     serviceId: SERVICE_OPTIONS[0].id,
     startDate: new Date().toISOString().split('T')[0],
@@ -34,13 +32,12 @@ const Calculator: React.FC = () => {
     selectedDates: [] as string[],
     visitsPerDay: 1,
     petCount: 1,
+    visitTime: '',
     userName: '',
     userPhone: '',
     address: '',
-    visitTime: '10:00',
     petName: '',
     petBreed: '',
-    petAge: '',
     request: '',
     depositorName: ''
   });
@@ -110,7 +107,7 @@ const Calculator: React.FC = () => {
 
   const handleBookingSubmit = async () => {
     if (!formData.userName || !formData.userPhone || !formData.address || !formData.depositorName) {
-      return alert('필수 정보를 모두 입력해 주세요.');
+      return alert('필수 정보를 모두 입력해 주세요');
     }
     
     setLoading(true);
@@ -119,7 +116,7 @@ const Calculator: React.FC = () => {
         ...formData,
         serviceName: SERVICE_OPTIONS.find(s => s.id === formData.serviceId)?.name || '',
         totalCost: result?.totalCost || 0,
-        platformFee: Math.round((result?.totalCost || 0) * PLATFORM_FEE_RATE) // 30% 수수료 계산
+        platformFee: Math.round((result?.totalCost || 0) * PLATFORM_FEE_RATE)
       };
       
       await api.verifyPayment({
@@ -140,11 +137,11 @@ const Calculator: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center p-6 text-center">
         <div className="max-w-md w-full bg-white p-12 rounded-[3.5rem] shadow-2xl border border-amber-100">
-          <div className="text-7xl mb-8">💌</div>
-          <h2 className="text-3xl font-black mb-4">예약 신청 완료!</h2>
+          <div className="text-7xl mb-8">✅</div>
+          <h2 className="text-3xl font-black mb-4">예약 접수 완료!</h2>
           <p className="text-gray-500 font-bold mb-10 text-sm leading-relaxed">
-            입금자명 <span className="text-amber-700 font-black">[{formData.depositorName}]</span>으로 확인 부탁드립니다.<br />
-            실장님이 확인 즉시 안내 문자를 발송해 드립니다.
+            입금자명 <span className="text-amber-700 font-black">[{formData.depositorName}]</span>으로 확인 부탁드립니다<br />
+            담당자가 확인 즉시 안내 문자를 발송해드립니다.
           </p>
           <button onClick={() => window.location.href = '/'} className="w-full bg-gray-900 text-white py-5 rounded-2xl font-black shadow-xl">
             홈으로 가기
@@ -185,14 +182,14 @@ const Calculator: React.FC = () => {
                   <input type="checkbox" checked={formData.visitsPerDay === 2} readOnly className="w-5 h-5 accent-amber-700" />
                   <div className="flex-1">
                     <span className="text-sm font-black text-gray-900">하루 2회 방문 (오전 + 저녁)</span>
-                    <p className="text-xs text-gray-500 font-bold">기본 요금 × 2배</p>
+                    <p className="text-xs text-gray-500 font-bold">기본 가격 × 2배</p>
                   </div>
                 </div>
 
                 <div className="p-8 bg-amber-50 rounded-[2rem] border border-amber-100 text-center">
                   <div className="text-[10px] font-black text-amber-700 uppercase tracking-widest mb-1">Estimated Amount</div>
                   <div className="text-4xl font-[950] text-gray-900">{(result?.totalCost || 0).toLocaleString()}원</div>
-                  <div className="text-sm font-bold text-gray-500 mt-2">입금 시 예약 대기 상태가 됩니다.</div>
+                  <div className="text-sm font-bold text-gray-500 mt-2">입금 후 예약 접수 상태가 됩니다</div>
                 </div>
 
                 <button onClick={() => setStep('INFO')} className="w-full bg-amber-700 text-white py-6 rounded-2xl font-black shadow-lg">
@@ -210,7 +207,7 @@ const Calculator: React.FC = () => {
                 <input type="tel" placeholder="연락처 (010-0000-0000)" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.userPhone} onChange={e => setFormData(p => ({ ...p, userPhone: e.target.value }))} />
                 <input type="text" placeholder="방문 주소" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.address} onChange={e => setFormData(p => ({ ...p, address: e.target.value }))} />
                 <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="아이 이름" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petName} onChange={e => setFormData(p => ({ ...p, petName: e.target.value }))} />
+                  <input type="text" placeholder="펫 이름" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petName} onChange={e => setFormData(p => ({ ...p, petName: e.target.value }))} />
                   <input type="text" placeholder="견종/묘종" className="w-full p-5 bg-gray-50 rounded-2xl font-bold outline-none" value={formData.petBreed} onChange={e => setFormData(p => ({ ...p, petBreed: e.target.value }))} />
                 </div>
               </div>
@@ -227,12 +224,12 @@ const Calculator: React.FC = () => {
               <div className="bg-amber-50/50 p-10 rounded-[3rem] border border-amber-100 text-center space-y-4">
                 <div className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Bank Info</div>
                 <div className="text-2xl font-black text-gray-900">대구은행 5081-3446-573</div>
-                <div className="text-base font-bold text-amber-800">예금주: 박문기(펫시터의정석)</div>
+                <div className="text-base font-bold text-amber-800">예금주: 박문기 (펫시터의정석)</div>
                 <input type="text" placeholder="입금자명 입력" className="w-full p-5 bg-white rounded-2xl font-black text-center shadow-sm border border-amber-100 outline-none" value={formData.depositorName} onChange={e => setFormData(p => ({ ...p, depositorName: e.target.value }))} />
               </div>
               <div className="flex gap-4">
                 <button onClick={() => setStep('INFO')} className="flex-1 py-6 rounded-2xl font-bold border-2 border-gray-100 text-gray-400">이전</button>
-                <button onClick={handleBookingSubmit} className="flex-[2] bg-gray-900 text-white py-6 rounded-2xl font-black shadow-xl">{(result?.totalCost || 0).toLocaleString()}원 예약 신청</button>
+                <button onClick={handleBookingSubmit} className="flex-[2] bg-gray-900 text-white py-6 rounded-2xl font-black shadow-xl">{(result?.totalCost || 0).toLocaleString()}원 예약 접수</button>
               </div>
             </div>
           )}

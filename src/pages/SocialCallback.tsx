@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
@@ -22,7 +21,7 @@ const SocialCallback: React.FC<SocialCallbackProps> = ({ onLoginSuccess }) => {
       const redirectUri = `${window.location.origin}/callback`;
 
       if (error) {
-        console.error('Auth Error:', error);
+        console.error('카카오 인증 에러:', error);
         navigate('/');
         return;
       }
@@ -31,16 +30,17 @@ const SocialCallback: React.FC<SocialCallbackProps> = ({ onLoginSuccess }) => {
         processed.current = true;
         try {
           const res = await api.socialLogin(provider, code, redirectUri);
+          
           if (res.success) {
             onLoginSuccess(res.user);
             localStorage.setItem('user', JSON.stringify(res.user));
             navigate('/', { replace: true });
           } else {
-            throw new Error(res.message);
+            throw new Error(res.message || '로그인 처리 실패');
           }
         } catch (error: any) {
-          console.error('Login Error:', error);
-          alert(`로그인 처리 중 오류가 발생했습니다: ${error.message}`);
+          console.error('서버 통신 에러:', error);
+          alert(`로그인 중 오류가 발생했습니다: ${error.message}`);
           navigate('/');
         }
       } else {
@@ -53,9 +53,9 @@ const SocialCallback: React.FC<SocialCallbackProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-white p-6 text-center">
-      <div className="spinner mb-6 w-10 h-10 border-t-amber-700"></div>
-      <h2 className="text-lg font-black text-gray-900 tracking-tight">로그인 중입니다</h2>
-      <p className="text-gray-400 mt-2 font-bold text-xs">잠시만 기다려 주세요.</p>
+      <div className="w-12 h-12 border-4 border-amber-100 border-t-amber-600 rounded-full animate-spin mb-6"></div>
+      <h2 className="text-xl font-bold text-gray-900 tracking-tight">안전하게 로그인 중입니다</h2>
+      <p className="text-gray-500 mt-2 font-medium">잠시만 기다려 주세요.</p>
     </div>
   );
 };
