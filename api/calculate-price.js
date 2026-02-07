@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -10,12 +9,10 @@ export default async function handler(req, res) {
   try {
     const { basePrice, startDate, endDate, petCount, visitTime = '12:00' } = req.body;
     
-    // 한국 시간 기준으로 '오늘' 구하기 (Vercel 서버 시간 보정)
     const now = new Date();
     const kstNow = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     const todayStr = kstNow.toISOString().split('T')[0];
 
-    // 입력받은 날짜를 UTC 자정 기준으로 고정 (날짜 계산용)
     const start = new Date(`${startDate}T00:00:00Z`);
     const end = new Date(`${endDate}T00:00:00Z`);
     
@@ -23,7 +20,6 @@ export default async function handler(req, res) {
     let totalCost = 0;
     let totalDays = 0;
 
-    // 명절 및 연결된 주말 (무조건 1만원 할증 구간)
     const BIG_HOLIDAY_SEASON = [
       '2025-01-25', '2025-01-26', '2025-01-27', '2025-01-28', '2025-01-29', '2025-01-30',
       '2025-10-03', '2025-10-04', '2025-10-05', '2025-10-06', '2025-10-07', '2025-10-08', '2025-10-09',
@@ -47,13 +43,12 @@ export default async function handler(req, res) {
     const hour = parseInt(visitTime.split(':')[0]);
     const isNight = hour >= 20 || hour < 8;
 
-    // 날짜 루프 로직 수정: while 문으로 변경하여 무한 루프나 누락 방지
     let d = new Date(start);
     while (d <= end) {
       totalDays++;
       let dailyCost = basePrice;
       const dateStr = d.toISOString().split('T')[0];
-      const dayOfWeek = d.getUTCDay(); // 0: 일요일, 6: 토요일
+      const dayOfWeek = d.getUTCDay();
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
       if (BIG_HOLIDAY_SEASON.includes(dateStr)) {
@@ -75,8 +70,6 @@ export default async function handler(req, res) {
       }
 
       totalCost += dailyCost;
-      
-      // 다음 날로 이동 (UTC 기준 안전하게 가산)
       d.setUTCDate(d.getUTCDate() + 1);
     }
 

@@ -1,18 +1,8 @@
-
 import { db } from './_db.js';
 
-async function sendTelegramNotification(message) {
-  const allKeys = Object.keys(process.env);
-  const findEnv = (target) => {
-    const key = allKeys.find(k => 
-      k.trim().toUpperCase() === target.toUpperCase() || 
-      k.trim().toUpperCase().includes(target.toUpperCase())
-    );
-    return key ? process.env[key].trim() : null;
-  };
-
-  const BOT_TOKEN = findEnv('TELEGRAM_BOT_TOKEN') || findEnv('BOT_TOKEN');
-  const CHAT_ID = findEnv('TELEGRAM_CHAT_ID') || findEnv('CHAT_ID');
+async function sendTelegram(message) {
+  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7224856037:AAFI0xI30XyJ-pY1M-P5lRzH6fR9fXvYvYk";
+  const CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1028713025";
   
   if (!BOT_TOKEN || !CHAT_ID) return;
 
@@ -23,7 +13,7 @@ async function sendTelegramNotification(message) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' })
     });
   } catch (err) {
-    console.error('[NOTIFY_ERROR]', err);
+    console.error('[TELEGRAM_ERROR]', err);
   }
 }
 
@@ -43,8 +33,14 @@ export default async function handler(req, res) {
     };
     db.applications.push(application);
     
-    const msg = `🎖️ <b>신규 전문가 지원서</b>\n\n👤 성함: ${application.name}\n📞 연락처: ${application.phone}\n📍 지역: ${application.address}\n💬 지원동기: ${application.motivation?.substring(0, 100)}...`;
-    await sendTelegramNotification(msg);
+    const msg = `🎖️ <b>신규 전문가 지원서</b>
+
+👤 성함: ${application.name}
+📞 연락처: ${application.phone}
+📍 지역: ${application.address}
+💬 지원동기: ${application.motivation?.substring(0, 100)}...`;
+    
+    await sendTelegram(msg);
     
     return res.status(200).json({ success: true, data: application });
   } catch (err) {

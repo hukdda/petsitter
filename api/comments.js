@@ -1,18 +1,8 @@
-
 import { db } from './_db.js';
 
-async function sendTelegramNotification(message) {
-  const allKeys = Object.keys(process.env);
-  const findEnv = (target) => {
-    const key = allKeys.find(k => 
-      k.trim().toUpperCase() === target.toUpperCase() || 
-      k.trim().toUpperCase().includes(target.toUpperCase())
-    );
-    return key ? process.env[key].trim() : null;
-  };
-
-  const BOT_TOKEN = findEnv('TELEGRAM_BOT_TOKEN') || findEnv('BOT_TOKEN');
-  const CHAT_ID = findEnv('TELEGRAM_CHAT_ID') || findEnv('CHAT_ID');
+async function sendTelegram(message) {
+  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7224856037:AAFI0xI30XyJ-pY1M-P5lRzH6fR9fXvYvYk";
+  const CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1028713025";
   
   if (!BOT_TOKEN || !CHAT_ID) return false;
 
@@ -58,15 +48,13 @@ export default async function handler(req, res) {
       
       db.comments.unshift(newComment);
 
-      const msg = `
-💬 <b>홈페이지 새로운 후기 등록</b>
+      const msg = `💬 <b>홈페이지 새로운 후기 등록</b>
 
 👤 작성자: ${author} 님
 📍 지역: ${region}
-📝 내용: ${content.substring(0, 100)}...
-      `.trim();
+📝 내용: ${content.substring(0, 100)}...`;
       
-      await sendTelegramNotification(msg);
+      await sendTelegram(msg);
 
       return res.status(200).json({ success: true, data: newComment });
     }

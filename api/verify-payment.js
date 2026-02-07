@@ -1,10 +1,8 @@
-
 import { db } from './_db.js';
 
-async function sendTelegramNotification(message) {
-  // 환경변수에서 토큰 찾기
+async function sendTelegram(message) {
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7224856037:AAFI0xI30XyJ-pY1M-P5lRzH6fR9fXvYvYk";
-  const CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1028713025"; // 준혁 대표님 ID로 추정되는 값
+  const CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1028713025";
   
   if (!BOT_TOKEN || !CHAT_ID) return false;
 
@@ -45,8 +43,7 @@ export default async function handler(req, res) {
     const statusText = paymentMethod === 'BANK' ? '<b>[입금 대기]</b>' : '<b>[결제 완료]</b>';
     const mockTag = isMock ? ' 🧪 <b>[가상결제테스트]</b>' : '';
     
-    const telegramMsg = `
-${methodEmoji} <b>새로운 예약 발생${mockTag}</b>
+    const telegramMsg = `${methodEmoji} <b>새로운 예약 발생${mockTag}</b>
 
 👤 예약자: ${newBooking.userName} (${newBooking.userPhone})
 🐾 반려동물: ${newBooking.petName} (${newBooking.petBreed})
@@ -54,12 +51,9 @@ ${methodEmoji} <b>새로운 예약 발생${mockTag}</b>
 📅 일정: ${newBooking.startDate} ~ ${newBooking.endDate}
 💰 금액: ${newBooking.totalCost.toLocaleString()}원
 상태: ${statusText}
-ID: <code>${merchant_uid}</code>
-    `.trim();
+ID: <code>${merchant_uid}</code>`;
 
-    await sendTelegramNotification(telegramMsg);
-
-    // 가상 DB에 저장
+    await sendTelegram(telegramMsg);
     db.bookings.push(newBooking);
 
     return res.status(200).json({ 
