@@ -10,19 +10,16 @@ export default async function handler(req, res) {
   
   const REDIRECT_URI = "https://www.lovelypetsitter.com/api/auth/social";
   const KAKAO_CLIENT_ID = "4e82f00882c1c24d0b83c1e001adce2f";
-  
-  // [수정 완료] 사장님이 직접 적어주신 코드 그대로 반영했습니다!
-  const KAKAO_CLIENT_SECRET = "XX8Uw35cnlTEiBkSyrEiAdJD46vfhIrv"; 
 
   if (!code) return res.status(400).json({ success: false, message: '인가 코드가 없음' });
 
   try {
+    // Client Secret을 꺼버렸기 때문에 body에서 뺐습니다.
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       client_id: KAKAO_CLIENT_ID,
       redirect_uri: REDIRECT_URI,
-      code: code,
-      client_secret: KAKAO_CLIENT_SECRET
+      code: code
     });
 
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
@@ -46,8 +43,7 @@ export default async function handler(req, res) {
       success: true, 
       user: {
         id: userData.id,
-        name: userData.properties?.nickname || '사용자',
-        profileImg: userData.properties?.profile_image || ''
+        name: userData.properties?.nickname || '사용자'
       } 
     });
   } catch (err) {
