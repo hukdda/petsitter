@@ -1,8 +1,15 @@
-
 export interface ServiceOption {
   id: string;
   name: string;
   basePrice: number;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  profileImg?: string;
+  phone?: string;
 }
 
 export interface ApplicationData {
@@ -14,27 +21,14 @@ export interface ApplicationData {
   address: string;
   addressDetail: string;
   currentJob: string;
-  currentJobDirect?: string;
-  canDeclareIncome: boolean;
   activeDaysPerMonth: string; 
   availableDays: string[];    
   availableTimes: string[];   
-  availableTimesDirect?: string;
-  activityRegion: string;     
-  transportation: string;     
   catExperience: string;      
   dogExperience: string;      
-  otherPetExp: string;        
-  industryExp: string;        
-  sitterHistory: string;      
   motivation: string;         
-  discoveryPath: string;      
-  discoveryPathDirect?: string;
   agreedToProgram: boolean;
-  agreedToFee: boolean;
   noCriminalRecord: boolean;  
-  smokingPledge: boolean;     
-  safetyPledge: boolean;      
   signature: string;
   appliedAt: string;
 }
@@ -44,9 +38,11 @@ export interface BookingData {
   userName: string;
   userPhone: string;
   address: string;
+  addressDistrict: string;    // ✅ 신규: 구/군
+  addressDetail: string;      // ✅ 신규: 상세주소
   petName: string;
   petBreed: string;
-  petAge: string;
+  petAge?: number;            // ✅ 신규: 반려동물 나이
   petCount: number;
   serviceName: string;
   startDate: string;
@@ -54,9 +50,12 @@ export interface BookingData {
   visitTime: string;
   request: string;
   totalCost: number;
-  paymentMethod: 'CARD' | 'BANK'; // 결제 수단 추가
-  depositorName?: string;         // 입금자명 추가
-  status: 'PENDING' | 'PAID' | 'CANCELLED' | 'WAITING_DEPOSIT'; // 무통장 대기 상태 추가
+  platformFee: number;
+  sitterAmount: number;
+  managedBy: string;
+  paymentMethod: 'CARD' | 'BANK';
+  depositorName?: string;
+  status: 'PENDING' | 'PAID' | 'CANCELLED' | 'WAITING_DEPOSIT';
   paidAt?: string;
 }
 
@@ -86,5 +85,6 @@ export interface PaymentVerificationRequest {
   merchant_uid: string;
   amount: number;
   paymentMethod: 'CARD' | 'BANK';
-  bookingData?: any;
+  bookingData: any;
+  authno?: string;
 }
