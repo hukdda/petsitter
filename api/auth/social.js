@@ -11,13 +11,10 @@ export default async function handler(req, res) {
   const REDIRECT_URI = "https://www.lovelypetsitter.com/api/auth/social";
   const KAKAO_CLIENT_ID = "4e82f00882c1c24d0b83c1e001adce2f";
   
-  // [범인 검거 완료] 사장님 캡처 화면에 있던 그 코드를 여기 넣었습니다!
-  const KAKAO_CLIENT_SECRET = "XX8Uw35cnlTEiBkSyreIAdJD46vfhIrv"; 
+  // [수정 완료] 사장님이 직접 적어주신 코드 그대로 반영했습니다!
+  const KAKAO_CLIENT_SECRET = "XX8Uw35cnlTEiBkSyrEiAdJD46vfhIrv"; 
 
-  if (!code) {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    return res.redirect(kakaoAuthUrl);
-  }
+  if (!code) return res.status(400).json({ success: false, message: '인가 코드가 없음' });
 
   try {
     const params = new URLSearchParams({
@@ -25,7 +22,7 @@ export default async function handler(req, res) {
       client_id: KAKAO_CLIENT_ID,
       redirect_uri: REDIRECT_URI,
       code: code,
-      client_secret: KAKAO_CLIENT_SECRET // 이제 이 비밀번호가 카카오 문을 열어줄 겁니다.
+      client_secret: KAKAO_CLIENT_SECRET
     });
 
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
@@ -45,7 +42,6 @@ export default async function handler(req, res) {
     });
     const userData = await userRes.json();
 
-    // 로그인 성공 시 사용자 정보 반환
     return res.status(200).json({ 
       success: true, 
       user: {
@@ -54,7 +50,6 @@ export default async function handler(req, res) {
         profileImg: userData.properties?.profile_image || ''
       } 
     });
-
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
