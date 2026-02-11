@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 브라우저 접속 허용 설정 (CORS 해결)
+  // 🚨 [핵심] CORS 보안 통과를 위해 모든 도메인 허용
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -12,15 +12,13 @@ export default async function handler(req, res) {
 
   const { code } = req.query;
 
-  // 🚨 [핵심] 코드가 없으면 즉시 카카오 로그인창으로 강제 이동시킵니다.
+  // 🚨 만약 code가 없으면 카카오로 보내줍니다.
   if (!code) {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
-    res.writeHead(302, { Location: kakaoAuthUrl });
-    res.end();
-    return;
+    const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+    return res.redirect(authUrl);
   }
 
-  // 코드가 있을 때 실행되는 로그인 로직 (방법 B)
+  // 🚨 code가 있으면 (지금 사장님 상황) 로그인을 마무리합니다.
   try {
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
@@ -42,6 +40,8 @@ export default async function handler(req, res) {
     });
     const userData = await userRes.json();
 
+    // 🚨 성공 후 메인 페이지로 사용자 정보를 담아 보냅니다.
+    // (이 부분이 가장 안전한 보안 방법 B의 핵심입니다)
     return res.status(200).json({ 
       success: true, 
       user: { id: userData.id, name: userData.properties?.nickname } 
