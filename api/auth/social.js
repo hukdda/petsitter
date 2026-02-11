@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 헤더 설정 (사장님 사이트 전용)
+  // CORS 설정
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -12,14 +12,19 @@ export default async function handler(req, res) {
 
   const { code } = req.query;
 
-  // 1단계: 인가 코드 체크 (없으면 카카오로 강제 이송)
+  // 🚨 [수정] 직접 redirect 하지 않고, 프론트에 주소를 던져줍니다.
   if (!code) {
-    const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    return res.redirect(authUrl); 
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    
+    // 브라우저가 이 응답을 받으면 직접 저 주소로 이동하게 됩니다.
+    return res.status(200).json({ 
+      success: false, 
+      needRedirect: true, 
+      url: kakaoAuthUrl 
+    });
   }
 
   try {
-    // 2단계: 카카오 토큰 교환 (인가 코드가 진짜인지 검증)
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
@@ -33,22 +38,21 @@ export default async function handler(req, res) {
     });
 
     const tokenData = await tokenRes.json();
-    if (!tokenRes.ok) return res.status(401).json({ success: false, error: "Token Exchange Failed" });
+    if (!tokenRes.ok) return res.status(401).json({ success: false, details: tokenData });
 
-    // 3단계: 사용자 정보 수신 (진짜 로그인 성공 여부 결정)
     const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` }
     });
     const userData = await userRes.json();
 
-    if (!userData.id) return res.status(401).json({ success: false, error: "Invalid User Info" });
-
     return res.status(200).json({ 
       success: true, 
-      user: { id: userData.id, name: userData.properties?.nickname } 
+      user: {
+        id: userData.id,
+        name: userData.properties?.nickname || '사용자'
+      } 
     });
-
   } catch (err) {
-    return res.status(500).json({ success: false, error: "Server Error" });
+    return res.status(500).json({ success: false, error: err.message });
   }
 }
