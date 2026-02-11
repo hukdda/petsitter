@@ -1,57 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
-interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onLoginSuccess: (user: any) => void;
-}
-
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [agreed, setAgreed] = useState(true);
-
+const LoginModal = ({ isOpen, onClose }: any) => {
   if (!isOpen) return null;
 
-  const handleSocialLogin = (provider: 'kakao') => {
-    if (!agreed) {
-      alert('이용약관 및 개인정보 처리방침에 동의해 주세요.');
-      return;
-    }
+  const handleKakao = () => {
+    // 🚨 딱 3개만 확인: ID, 주소, 그리고 바로 이동!
+    const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
+    const redirectUri = "https://www.lovelypetsitter.com/callback";
+    const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code`;
     
-    setLoading(provider);
-    
-    // 🚨 [가장 확실한 방법] 서버 거치지 않고 바로 카카오 로그인창으로 보냅니다.
-    if (provider === 'kakao') {
-      const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
-      // 사장님이 카카오에 등록해두신 그 주소 그대로 사용합니다.
-      const redirectUri = "https://www.lovelypetsitter.com/callback";
-      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
-      
-      window.location.href = kakaoAuthUrl;
-    }
+    // 서버고 뭐고 무조건 카카오로 날아갑니다.
+    window.location.href = kakaoUrl;
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] overflow-y-auto bg-black/80 backdrop-blur-md flex justify-center items-center p-4">
-      <div className="relative bg-white w-full max-w-[380px] rounded-[3rem] shadow-2xl p-8 pt-12">
-        <button onClick={onClose} className="absolute top-6 right-6 text-gray-300 hover:text-gray-900 text-xl">✕</button>
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-50 rounded-2xl mb-4"><span className="text-3xl">🐾</span></div>
-          <h3 className="text-2xl font-black text-gray-900">간편 회원가입</h3>
-        </div>
+    <div style={{position:'fixed', inset:0, zIndex:9999, backgroundColor:'rgba(0,0,0,0.8)', display:'flex', justifyContent:'center', alignItems:'center'}}>
+      <div style={{backgroundColor:'white', padding:'40px', borderRadius:'30px', textAlign:'center', maxWidth:'320px', width:'100%'}}>
+        <div style={{fontSize:'40px', marginBottom:'20px'}}>🐾</div>
+        <h2 style={{fontWeight:'bold', fontSize:'20px', marginBottom:'10px'}}>간편 로그인</h2>
+        <p style={{fontSize:'13px', color:'#666', marginBottom:'30px'}}>카카오로 3초만에 시작하세요!</p>
+        
         <button 
-          onClick={() => handleSocialLogin('kakao')} 
-          className="w-full h-16 bg-[#FEE500] text-[#191919] rounded-2xl flex items-center justify-center gap-3 font-black shadow-lg"
+          onClick={handleKakao}
+          style={{width:'100%', height:'55px', backgroundColor:'#FEE500', border:'none', borderRadius:'12px', fontWeight:'bold', fontSize:'16px', cursor:'pointer'}}
         >
-          {loading === 'kakao' ? "연결 중..." : "카카오로 시작하기"}
+          카카오로 로그인하기
         </button>
-        <div className="mt-6">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="w-5 h-5 accent-amber-700" />
-            <span className="text-[11px] font-bold text-gray-500 underline">이용약관 및 개인정보 처리방침 동의</span>
-          </label>
-        </div>
+
+        <button onClick={onClose} style={{marginTop:'20px', background:'none', border:'none', color:'#999', textDecoration:'underline', cursor:'pointer'}}>
+          닫기
+        </button>
       </div>
     </div>
   );
