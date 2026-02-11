@@ -8,14 +8,13 @@ export default async function handler(req, res) {
   const data = { ...req.query, ...req.body };
   const { code } = data;
   
-  // [수정] 접속한 도메인(www 유무 등)을 자동으로 파악하여 주소를 만듭니다.
-  const host = req.headers.host;
-  const protocol = req.headers['x-forwarded-proto'] || 'https';
-  const REDIRECT_URI = `${protocol}://${host}/api/auth/social`;
-  
+  // 🚨 [수정] 에러 메시지에 나온 주소와 토씨 하나 안 틀리게 맞췄습니다.
+  const REDIRECT_URI = "https://www.lovelypetsitter.com/callback";
   const KAKAO_CLIENT_ID = "4e82f00882c1c24d0b83c1e001adce2f";
+  const KAKAO_CLIENT_SECRET = "XX8Uw35cnlTEiBkSyrEiAdJD46vfhIrv"; 
 
   if (!code) {
+    // 코드가 없으면 카카오 로그인창으로 보낼 때도 동일한 주소를 사용합니다.
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     return res.redirect(kakaoAuthUrl);
   }
@@ -24,8 +23,9 @@ export default async function handler(req, res) {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       client_id: KAKAO_CLIENT_ID,
-      redirect_uri: REDIRECT_URI, // 이제 카카오에 등록된 4개 중 하나와 자동으로 매칭됩니다.
-      code: code
+      redirect_uri: REDIRECT_URI, // 카카오가 요구하는 그 주소!
+      code: code,
+      client_secret: KAKAO_CLIENT_SECRET
     });
 
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
@@ -35,10 +35,7 @@ export default async function handler(req, res) {
     });
 
     const tokenData = await tokenRes.json();
-
-    if (!tokenRes.ok) {
-      return res.status(401).json({ success: false, details: tokenData });
-    }
+    if (!tokenRes.ok) return res.status(401).json({ success: false, details: tokenData });
 
     const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` }
@@ -49,7 +46,8 @@ export default async function handler(req, res) {
       success: true, 
       user: {
         id: userData.id,
-        name: userData.properties?.nickname || '사용자'
+        name: userData.properties?.nickname || '사용자',
+        profileImg: userData.properties?.profile_image || ''
       } 
     });
   } catch (err) {
