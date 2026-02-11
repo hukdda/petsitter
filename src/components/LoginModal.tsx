@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -8,109 +6,97 @@ interface LoginModalProps {
   onLoginSuccess: (user: any) => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [agreed, setAgreed] = useState(true);
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSocialLogin = (provider: 'kakao') => {
-    if (!agreed) {
-      alert('이용약관 및 개인정보 처리방침에 동의해 주세요.');
-      return;
+  const handleKakaoLogin = async () => {
+    setIsLoading(true);
+    try {
+      localStorage.setItem('social_provider', 'kakao');
+      
+      const res = await fetch('/api/auth/social');
+      const data = await res.json();
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('로그인 URL을 받지 못했습니다');
+      }
+    } catch (e) {
+      console.error('Kakao login error:', e);
+      alert("로그인 페이지를 불러올 수 없습니다.");
+      setIsLoading(false);
     }
-    
-    setLoading(provider);
-    const redirectUri = `${window.location.origin}/callback`;
-    localStorage.setItem('social_provider', provider);
-    
-    if (provider === 'kakao') {
-      const clientId = "4e82f00882c1c24d0b83c1e001adce2f";
-      // 심사 통과 전에는 기본 권한만 요청 (안전한 접속 보장)
-      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-      window.location.href = kakaoAuthUrl;
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
   };
 
   return (
     <div 
-      className="fixed inset-0 z-[1000] overflow-y-auto bg-black/80 backdrop-blur-md flex justify-center items-center p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={handleBackdropClick}
     >
-      <div className="relative bg-white w-full max-w-[380px] rounded-[3rem] shadow-2xl animate-modal-pop overflow-hidden border border-gray-100">
+      <div className="relative bg-white rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.25)] p-8 md:p-12 w-full max-w-md animate-in zoom-in-95 duration-300">
+        {/* 닫기 버튼 */}
         <button 
-          onClick={onClose} 
-          className="absolute top-6 right-6 text-gray-300 hover:text-gray-900 text-xl z-40 p-2"
+          onClick={onClose}
+          className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+          disabled={isLoading}
         >
-          ✕
+          <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
-        
-        <div className="p-8 pt-12">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-50 rounded-2xl mb-4">
-              <span className="text-3xl">🐾</span>
-            </div>
-            <h3 className="text-2xl font-black text-gray-900 tracking-tighter">간편 회원가입</h3>
-            <p className="text-gray-400 text-xs font-bold mt-1">
-              카카오로 3초 만에 가입하고 시작하세요.
-            </p>
-          </div>
 
-          {/* 카카오 심사팀을 위한 수집항목 고지 섹션 (이게 핵심입니다) */}
-          <div className="bg-gray-50 rounded-2xl p-5 mb-8 border border-gray-100">
-            <div className="text-[10px] font-black text-amber-700 mb-3 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-amber-700 rounded-full animate-pulse"></span>
-              회원가입 시 수집 항목 안내
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-[11px] font-bold">
-                <span className="text-gray-500">필수 항목</span>
-                <span className="text-gray-900">성명, 휴대폰번호, 성별, 연령대</span>
-              </div>
-              <div className="flex justify-between items-center text-[11px] font-bold">
-                <span className="text-gray-500">이용 목적</span>
-                <span className="text-gray-900">본인 확인 및 맞춤 시터 매칭</span>
-              </div>
-              <div className="flex justify-between items-center text-[11px] font-bold">
-                <span className="text-gray-500">보유 기간</span>
-                <span className="text-gray-900">회원 탈퇴 시 즉시 파기</span>
-              </div>
-            </div>
-          </div>
+        {/* 헤더 */}
+        <div className="text-center mb-8">
+          <div className="text-5xl mb-4">🐾</div>
+          <h2 className="text-2xl md:text-3xl font-[1000] text-gray-900 tracking-tight mb-3">
+            펫시터의 정석
+          </h2>
+          <p className="text-gray-500 font-bold text-sm">
+            3초만에 시작하기
+          </p>
+        </div>
 
-          <div className="space-y-4 mb-8">
-            <button 
-              onClick={() => handleSocialLogin('kakao')} 
-              className="w-full h-16 bg-[#FEE500] text-[#191919] rounded-2xl flex items-center justify-center gap-3 font-black transition-all shadow-lg active:scale-95 hover:bg-[#F7E317]"
-            >
-              {loading === 'kakao' ? (
-                <div className="spinner border-[#191919]/20 border-t-[#191919] w-5 h-5"></div>
-              ) : (
-                <>
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.48 2 10.791c0 2.758 1.83 5.161 4.587 6.556l-1.159 4.255c-.07.258.21.464.415.303l5.013-3.292c.376.041.76.069 1.144.069 5.523 0 10-3.48 10-7.791S17.523 3 12 3z"/></svg>
-                  카카오로 시작하기
-                </>
-              )}
-            </button>
-          </div>
+        {/* 카카오 로그인 버튼 */}
+        <button
+          onClick={handleKakaoLogin}
+          disabled={isLoading}
+          className="w-full bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] py-5 rounded-2xl font-[1000] text-base shadow-lg flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <div className="w-6 h-6 border-3 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <>
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3C6.477 3 2 6.48 2 10.791c0 2.758 1.83 5.161 4.587 6.556l-1.159 4.255c-.07.258.21.464.415.303l5.013-3.292c.376.041.76.069 1.144.069 5.523 0 10-3.48 10-7.791S17.523 3 12 3z"/>
+              </svg>
+              <span>카카오로 3초만에 시작하기</span>
+            </>
+          )}
+        </button>
 
-          <div className="space-y-4">
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <input 
-                type="checkbox" 
-                checked={agreed} 
-                onChange={e => setAgreed(e.target.checked)}
-                className="w-5 h-5 accent-amber-700"
-              />
-              <span className="text-[11px] font-bold text-gray-500 leading-tight">
-                [필수] <Link to="/terms" className="underline hover:text-gray-900">이용약관</Link> 및 <Link to="/privacy" className="underline hover:text-gray-900">개인정보 처리방침</Link> 동의
-              </span>
-            </label>
-          </div>
-          
-          <div className="mt-10 pt-6 border-t border-gray-50 text-center">
-            <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.2em]">Pet Sitter Standard</p>
-          </div>
+        {/* 안내 문구 */}
+        <p className="text-center text-xs text-gray-400 mt-6 leading-relaxed">
+          로그인 시 <span className="text-gray-600 font-bold">이용약관</span> 및 <span className="text-gray-600 font-bold">개인정보처리방침</span>에 동의하게 됩니다.
+        </p>
+
+        {/* 카카오 심사용 수집 항목 고지 */}
+        <div className="mt-6 p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+          <p className="text-[10px] text-gray-500 leading-relaxed">
+            <span className="font-black text-amber-700">수집 항목:</span> 프로필 정보(닉네임, 프로필 사진)
+            <br/>
+            <span className="font-black text-amber-700">수집 목적:</span> 서비스 이용자 식별 및 후기 작성
+            <br/>
+            <span className="font-black text-amber-700">보유 기간:</span> 회원 탈퇴 시까지
+          </p>
         </div>
       </div>
     </div>
