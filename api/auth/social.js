@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 🚨 [핵심] CORS 보안 통과를 위해 모든 도메인 허용
+  // CORS 허용 설정
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -12,14 +12,14 @@ export default async function handler(req, res) {
 
   const { code } = req.query;
 
-  // 🚨 만약 code가 없으면 카카오로 보내줍니다.
+  // 🚨 [수정] 리다이렉트 대신 URL을 JSON으로 줍니다.
   if (!code) {
     const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
-    return res.redirect(authUrl);
+    return res.status(200).json({ needRedirect: true, url: authUrl });
   }
 
-  // 🚨 code가 있으면 (지금 사장님 상황) 로그인을 마무리합니다.
   try {
+    // 카카오 본사에서 토큰 받아오기 (방법 B 핵심)
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
@@ -35,13 +35,12 @@ export default async function handler(req, res) {
     const tokenData = await tokenRes.json();
     if (!tokenRes.ok) return res.status(401).json({ success: false, error: "토큰 실패" });
 
+    // 사용자 정보 가져오기
     const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` }
     });
     const userData = await userRes.json();
 
-    // 🚨 성공 후 메인 페이지로 사용자 정보를 담아 보냅니다.
-    // (이 부분이 가장 안전한 보안 방법 B의 핵심입니다)
     return res.status(200).json({ 
       success: true, 
       user: { id: userData.id, name: userData.properties?.nickname } 
